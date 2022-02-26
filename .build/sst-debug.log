@@ -1,0 +1,1872 @@
+[2022-02-25T19:39:54.992] [DEBUG] default - SST: 0.53.0
+[2022-02-25T19:39:54.994] [DEBUG] default - CDK: 1.132.0
+[2022-02-25T19:39:54.994] [INFO] default - Using stage: admin
+[2022-02-25T19:39:54.995] [INFO] default - [90mPreparing your SST app[39m
+[2022-02-25T19:39:54.998] [INFO] default - [90mTranspiling source[39m
+[2022-02-25T19:39:55.007] [INFO] default - [90mLinting source[39m
+[2022-02-25T19:39:55.402] [INFO] default - 
+[2022-02-25T19:39:55.403] [INFO] default - =======================
+[2022-02-25T19:39:55.403] [INFO] default -  Deploying debug stack
+[2022-02-25T19:39:55.403] [INFO] default - =======================
+[2022-02-25T19:39:55.403] [INFO] default - 
+[2022-02-25T19:39:55.404] [DEBUG] core - synth {
+  output: 'cdk.out',
+  app: 'node bin/index.js admin-notes-debug-stack admin us-east-1 /Users/yifan.guo/SSTProjects/notes /Users/yifan.guo/SSTProjects/notes/.build/lib',
+  rollback: false,
+  roleArn: undefined,
+  verbose: 0,
+  noColor: false
+}
+[2022-02-25T19:39:55.460] [TRACE] cdk - [43m[30m!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!![39m[49m
+
+[2022-02-25T19:39:55.461] [TRACE] cdk - [43m[30m!!                                                                                  !![39m[49m
+[43m[30m!!  This software has not been tested with node v17.1.0.                            !![39m[49m
+[43m[30m!!  You may to encounter runtime issues, and should switch to a supported release.  !![39m[49m
+[43m[30m!!                                                                                  !![39m[49m
+[43m[30m!!  As of the current release, supported versions of node are:                      !![39m[49m
+[43m[30m!!  - ^12.7.0                                                                       !![39m[49m
+[43m[30m!!  - ^14.5.0                                                                       !![39m[49m
+[43m[30m!!  - ^16.3.0                                                                       !![39m[49m
+[43m[30m!!                                                                                  !![39m[49m
+[43m[30m!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!![39m[49m
+
+[2022-02-25T19:39:56.168] [INFO] default - [90mDeploying stacks[39m
+[2022-02-25T19:39:56.168] [TRACE] core - Initial stack states: [{"name":"admin-notes-debug-stack","status":"pending","dependencies":[],"region":"us-east-1","events":[]}]
+[2022-02-25T19:39:56.168] [TRACE] core - After update deploy statuses: [{"name":"admin-notes-debug-stack","status":"pending","dependencies":[],"region":"us-east-1","events":[]}]
+[2022-02-25T19:39:56.169] [DEBUG] core - deploy stack: started admin-notes-debug-stack
+[2022-02-25T19:39:56.169] [DEBUG] core - deploy stack: get pre-deploy status
+[2022-02-25T19:39:56.546] [DEBUG] constructs-state - [AWS cloudformation 200 0.375s 0 retries] describeStacks({ StackName: 'admin-notes-debug-stack' })
+[2022-02-25T19:39:56.547] [DEBUG] core - deploy stack: get pre-deploy status: {
+  StackStatus: 'CREATE_COMPLETE',
+  LastUpdatedTime: 2021-11-27T22:47:57.012Z
+}
+[2022-02-25T19:39:56.548] [DEBUG] core - deploy stack: check template changed
+[2022-02-25T19:39:57.016] [DEBUG] constructs-state - [AWS cloudformation 200 0.468s 0 retries] getTemplate({ StackName: 'admin-notes-debug-stack', TemplateStage: 'Original' })
+[2022-02-25T19:39:57.034] [DEBUG] core - Resources:
+  TableCD117FA1:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+      BillingMode: PAY_PER_REQUEST
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Table/Resource
+  Bucket83908E77:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      LifecycleConfiguration:
+        Rules:
+          - ExpirationInDays: 1
+            Prefix: payloads/
+            Status: Enabled
+      Tags:
+        - Key: aws-cdk:auto-delete-objects
+          Value: 'true'
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Bucket/Resource
+  BucketPolicyE9A3008A:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: Bucket83908E77
+      PolicyDocument:
+        Statement:
+          - Action:
+              - s3:GetBucket*
+              - s3:List*
+              - s3:DeleteObject*
+            Effect: Allow
+            Principal:
+              AWS:
+                Fn::GetAtt:
+                  - CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092
+                  - Arn
+            Resource:
+              - Fn::GetAtt:
+                  - Bucket83908E77
+                  - Arn
+              - Fn::Join:
+                  - ''
+                  - - Fn::GetAtt:
+                        - Bucket83908E77
+                        - Arn
+                    - /*
+        Version: '2012-10-17'
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Bucket/Policy/Resource
+  BucketAutoDeleteObjectsCustomResourceBAFD23C2:
+    Type: Custom::S3AutoDeleteObjects
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F
+          - Arn
+      BucketName:
+        Ref: Bucket83908E77
+    DependsOn:
+      - BucketPolicyE9A3008A
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Bucket/AutoDeleteObjectsCustomResource/Default
+  CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+      ManagedPolicyArns:
+        - Fn::Sub: >-
+            arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: >-
+        admin-notes-debug-stack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role
+  CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: >-
+            AssetParameters1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1S3Bucket4842F32D
+        S3Key:
+          Fn::Join:
+            - ''
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - '||'
+                      - Ref: >-
+                          AssetParameters1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1S3VersionKeyD0A0B57A
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - '||'
+                      - Ref: >-
+                          AssetParameters1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1S3VersionKeyD0A0B57A
+      Timeout: 900
+      MemorySize: 128
+      Handler: __entrypoint__.handler
+      Role:
+        Fn::GetAtt:
+          - CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092
+          - Arn
+      Runtime: nodejs12.x
+      Description:
+        Fn::Join:
+          - ''
+          - - 'Lambda function for auto-deleting objects in '
+            - Ref: Bucket83908E77
+            - ' S3 bucket.'
+    DependsOn:
+      - CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092
+    Metadata:
+      aws:cdk:path: >-
+        admin-notes-debug-stack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler
+  Api:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: admin-notes-debug-stack-api
+      ProtocolType: WEBSOCKET
+      RouteSelectionExpression: $request.body.action
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Api
+  ApiStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId:
+        Ref: Api
+      StageName: admin
+      AutoDeploy: true
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/ApiStage
+  ConnectServiceRole07B61CE8:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: '2012-10-17'
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ''
+            - - 'arn:'
+              - Ref: AWS::Partition
+              - ':iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Connect/ServiceRole/Resource
+  ConnectServiceRoleDefaultPolicyCE008EDB:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - apigateway:*
+              - dynamodb:*
+              - execute-api:ManageConnections
+            Effect: Allow
+            Resource: '*'
+        Version: '2012-10-17'
+      PolicyName: ConnectServiceRoleDefaultPolicyCE008EDB
+      Roles:
+        - Ref: ConnectServiceRole07B61CE8
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Connect/ServiceRole/DefaultPolicy/Resource
+  Connect5B7625CA:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: >-
+            AssetParameters0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4S3Bucket40E0E393
+        S3Key:
+          Fn::Join:
+            - ''
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - '||'
+                      - Ref: >-
+                          AssetParameters0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4S3VersionKey32A15DAE
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - '||'
+                      - Ref: >-
+                          AssetParameters0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4S3VersionKey32A15DAE
+      Role:
+        Fn::GetAtt:
+          - ConnectServiceRole07B61CE8
+          - Arn
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: TableCD117FA1
+      Handler: wsConnect.main
+      MemorySize: 256
+      Runtime: nodejs12.x
+      Timeout: 10
+    DependsOn:
+      - ConnectServiceRoleDefaultPolicyCE008EDB
+      - ConnectServiceRole07B61CE8
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Connect/Resource
+      aws:asset:path: asset.0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4
+      aws:asset:property: Code
+  ConnectLogRetentionC1F463CD:
+    Type: Custom::LogRetention
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A
+          - Arn
+      LogGroupName:
+        Fn::Join:
+          - ''
+          - - /aws/lambda/
+            - Ref: Connect5B7625CA
+      RetentionInDays: 7
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Connect/LogRetention/Resource
+  ConnectConnectPermission9DBC7813:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - Connect5B7625CA
+          - Arn
+      Principal: apigateway.amazonaws.com
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Connect/ConnectPermission
+  LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: '2012-10-17'
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ''
+            - - 'arn:'
+              - Ref: AWS::Partition
+              - ':iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+    Metadata:
+      aws:cdk:path: >-
+        admin-notes-debug-stack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource
+  LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - logs:PutRetentionPolicy
+              - logs:DeleteRetentionPolicy
+            Effect: Allow
+            Resource: '*'
+        Version: '2012-10-17'
+      PolicyName: >-
+        LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB
+      Roles:
+        - Ref: LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB
+    Metadata:
+      aws:cdk:path: >-
+        admin-notes-debug-stack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource
+  LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs14.x
+      Code:
+        S3Bucket:
+          Ref: >-
+            AssetParametersb120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827S3Bucket2070BA0A
+        S3Key:
+          Fn::Join:
+            - ''
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - '||'
+                      - Ref: >-
+                          AssetParametersb120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827S3VersionKeyB95D17C3
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - '||'
+                      - Ref: >-
+                          AssetParametersb120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827S3VersionKeyB95D17C3
+      Role:
+        Fn::GetAtt:
+          - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB
+          - Arn
+    DependsOn:
+      - >-
+        LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB
+      - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB
+    Metadata:
+      aws:cdk:path: >-
+        admin-notes-debug-stack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource
+  ConnectIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId:
+        Ref: Api
+      IntegrationType: AWS_PROXY
+      IntegrationUri:
+        Fn::Join:
+          - ''
+          - - arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/
+            - Fn::GetAtt:
+                - Connect5B7625CA
+                - Arn
+            - /invocations
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/ConnectIntegration
+  ConnectRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId:
+        Ref: Api
+      RouteKey: $connect
+      AuthorizationType: NONE
+      Target:
+        Fn::Join:
+          - ''
+          - - integrations/
+            - Ref: ConnectIntegration
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/ConnectRoute
+  DisconnectServiceRole90AEC2EB:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: '2012-10-17'
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ''
+            - - 'arn:'
+              - Ref: AWS::Partition
+              - ':iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Disconnect/ServiceRole/Resource
+  DisconnectServiceRoleDefaultPolicy32856207:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - apigateway:*
+              - dynamodb:*
+              - execute-api:ManageConnections
+            Effect: Allow
+            Resource: '*'
+        Version: '2012-10-17'
+      PolicyName: DisconnectServiceRoleDefaultPolicy32856207
+      Roles:
+        - Ref: DisconnectServiceRole90AEC2EB
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Disconnect/ServiceRole/DefaultPolicy/Resource
+  Disconnect7D6B12BD:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: >-
+            AssetParameters0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4S3Bucket40E0E393
+        S3Key:
+          Fn::Join:
+            - ''
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - '||'
+                      - Ref: >-
+                          AssetParameters0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4S3VersionKey32A15DAE
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - '||'
+                      - Ref: >-
+                          AssetParameters0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4S3VersionKey32A15DAE
+      Role:
+        Fn::GetAtt:
+          - DisconnectServiceRole90AEC2EB
+          - Arn
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: TableCD117FA1
+      Handler: wsDisconnect.main
+      MemorySize: 256
+      Runtime: nodejs12.x
+      Timeout: 10
+    DependsOn:
+      - DisconnectServiceRoleDefaultPolicy32856207
+      - DisconnectServiceRole90AEC2EB
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Disconnect/Resource
+      aws:asset:path: asset.0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4
+      aws:asset:property: Code
+  DisconnectLogRetentionE61D7937:
+    Type: Custom::LogRetention
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A
+          - Arn
+      LogGroupName:
+        Fn::Join:
+          - ''
+          - - /aws/lambda/
+            - Ref: Disconnect7D6B12BD
+      RetentionInDays: 7
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Disconnect/LogRetention/Resource
+  DisconnectDisconnectPermission933E876E:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - Disconnect7D6B12BD
+          - Arn
+      Principal: apigateway.amazonaws.com
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Disconnect/DisconnectPermission
+  DisconnectIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId:
+        Ref: Api
+      IntegrationType: AWS_PROXY
+      IntegrationUri:
+        Fn::Join:
+          - ''
+          - - arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/
+            - Fn::GetAtt:
+                - Disconnect7D6B12BD
+                - Arn
+            - /invocations
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/DisconnectIntegration
+  DisconnectRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId:
+        Ref: Api
+      RouteKey: $disconnect
+      AuthorizationType: NONE
+      Target:
+        Fn::Join:
+          - ''
+          - - integrations/
+            - Ref: DisconnectIntegration
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/DisconnectRoute
+  ServiceRole4288B192:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: '2012-10-17'
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ''
+            - - 'arn:'
+              - Ref: AWS::Partition
+              - ':iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Default/ServiceRole/Resource
+  ServiceRoleDefaultPolicy94CF55F6:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - apigateway:*
+              - dynamodb:*
+              - execute-api:ManageConnections
+            Effect: Allow
+            Resource: '*'
+        Version: '2012-10-17'
+      PolicyName: ServiceRoleDefaultPolicy94CF55F6
+      Roles:
+        - Ref: ServiceRole4288B192
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Default/ServiceRole/DefaultPolicy/Resource
+  Resource:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: >-
+            AssetParameters0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4S3Bucket40E0E393
+        S3Key:
+          Fn::Join:
+            - ''
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - '||'
+                      - Ref: >-
+                          AssetParameters0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4S3VersionKey32A15DAE
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - '||'
+                      - Ref: >-
+                          AssetParameters0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4S3VersionKey32A15DAE
+      Role:
+        Fn::GetAtt:
+          - ServiceRole4288B192
+          - Arn
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: TableCD117FA1
+      Handler: wsDefault.main
+      MemorySize: 256
+      Runtime: nodejs12.x
+      Timeout: 10
+    DependsOn:
+      - ServiceRoleDefaultPolicy94CF55F6
+      - ServiceRole4288B192
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Default/Resource
+      aws:asset:path: asset.0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4
+      aws:asset:property: Code
+  LogRetentionDD0A1FA1:
+    Type: Custom::LogRetention
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A
+          - Arn
+      LogGroupName:
+        Fn::Join:
+          - ''
+          - - /aws/lambda/
+            - Ref: Resource
+      RetentionInDays: 7
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Default/LogRetention/Resource
+  DefaultPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - Resource
+          - Arn
+      Principal: apigateway.amazonaws.com
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Default/DefaultPermission
+  DefaultIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId:
+        Ref: Api
+      IntegrationType: AWS_PROXY
+      IntegrationUri:
+        Fn::Join:
+          - ''
+          - - arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/
+            - Fn::GetAtt:
+                - Resource
+                - Arn
+            - /invocations
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/DefaultIntegration
+  DefaultRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId:
+        Ref: Api
+      RouteKey: $default
+      AuthorizationType: NONE
+      Target:
+        Fn::Join:
+          - ''
+          - - integrations/
+            - Ref: DefaultIntegration
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/DefaultRoute
+Parameters:
+  AssetParameters1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1S3Bucket4842F32D:
+    Type: String
+    Description: >-
+      S3 bucket for asset
+      "1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1"
+  AssetParameters1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1S3VersionKeyD0A0B57A:
+    Type: String
+    Description: >-
+      S3 key for asset version
+      "1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1"
+  AssetParameters1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1ArtifactHash0128B949:
+    Type: String
+    Description: >-
+      Artifact hash for asset
+      "1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1"
+  AssetParameters0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4S3Bucket40E0E393:
+    Type: String
+    Description: >-
+      S3 bucket for asset
+      "0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4"
+  AssetParameters0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4S3VersionKey32A15DAE:
+    Type: String
+    Description: >-
+      S3 key for asset version
+      "0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4"
+  AssetParameters0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4ArtifactHashC679FCC4:
+    Type: String
+    Description: >-
+      Artifact hash for asset
+      "0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4"
+  AssetParametersb120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827S3Bucket2070BA0A:
+    Type: String
+    Description: >-
+      S3 bucket for asset
+      "b120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827"
+  AssetParametersb120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827S3VersionKeyB95D17C3:
+    Type: String
+    Description: >-
+      S3 key for asset version
+      "b120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827"
+  AssetParametersb120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827ArtifactHash1355580A:
+    Type: String
+    Description: >-
+      Artifact hash for asset
+      "b120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827"
+Outputs:
+  Endpoint:
+    Value:
+      Fn::Join:
+        - ''
+        - - Fn::GetAtt:
+              - Api
+              - ApiEndpoint
+          - /admin
+  BucketArn:
+    Value:
+      Fn::GetAtt:
+        - Bucket83908E77
+        - Arn
+  BucketName:
+    Value:
+      Ref: Bucket83908E77
+
+[2022-02-25T19:39:57.035] [DEBUG] core - Resources:
+  TableCD117FA1:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+      BillingMode: PAY_PER_REQUEST
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Table/Resource
+  Bucket83908E77:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      LifecycleConfiguration:
+        Rules:
+          - ExpirationInDays: 1
+            Prefix: payloads/
+            Status: Enabled
+      Tags:
+        - Key: aws-cdk:auto-delete-objects
+          Value: 'true'
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Bucket/Resource
+  BucketPolicyE9A3008A:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: Bucket83908E77
+      PolicyDocument:
+        Statement:
+          - Action:
+              - s3:GetBucket*
+              - s3:List*
+              - s3:DeleteObject*
+            Effect: Allow
+            Principal:
+              AWS:
+                Fn::GetAtt:
+                  - CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092
+                  - Arn
+            Resource:
+              - Fn::GetAtt:
+                  - Bucket83908E77
+                  - Arn
+              - Fn::Join:
+                  - ''
+                  - - Fn::GetAtt:
+                        - Bucket83908E77
+                        - Arn
+                    - /*
+        Version: '2012-10-17'
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Bucket/Policy/Resource
+  BucketAutoDeleteObjectsCustomResourceBAFD23C2:
+    Type: Custom::S3AutoDeleteObjects
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F
+          - Arn
+      BucketName:
+        Ref: Bucket83908E77
+    DependsOn:
+      - BucketPolicyE9A3008A
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Bucket/AutoDeleteObjectsCustomResource/Default
+  CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+      ManagedPolicyArns:
+        - Fn::Sub: >-
+            arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: >-
+        admin-notes-debug-stack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role
+  CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: >-
+            AssetParameters1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1S3Bucket4842F32D
+        S3Key:
+          Fn::Join:
+            - ''
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - '||'
+                      - Ref: >-
+                          AssetParameters1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1S3VersionKeyD0A0B57A
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - '||'
+                      - Ref: >-
+                          AssetParameters1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1S3VersionKeyD0A0B57A
+      Timeout: 900
+      MemorySize: 128
+      Handler: __entrypoint__.handler
+      Role:
+        Fn::GetAtt:
+          - CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092
+          - Arn
+      Runtime: nodejs12.x
+      Description:
+        Fn::Join:
+          - ''
+          - - 'Lambda function for auto-deleting objects in '
+            - Ref: Bucket83908E77
+            - ' S3 bucket.'
+    DependsOn:
+      - CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092
+    Metadata:
+      aws:cdk:path: >-
+        admin-notes-debug-stack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler
+  Api:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: admin-notes-debug-stack-api
+      ProtocolType: WEBSOCKET
+      RouteSelectionExpression: $request.body.action
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Api
+  ApiStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId:
+        Ref: Api
+      StageName: admin
+      AutoDeploy: true
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/ApiStage
+  ConnectServiceRole07B61CE8:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: '2012-10-17'
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ''
+            - - 'arn:'
+              - Ref: AWS::Partition
+              - ':iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Connect/ServiceRole/Resource
+  ConnectServiceRoleDefaultPolicyCE008EDB:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - apigateway:*
+              - dynamodb:*
+              - execute-api:ManageConnections
+            Effect: Allow
+            Resource: '*'
+        Version: '2012-10-17'
+      PolicyName: ConnectServiceRoleDefaultPolicyCE008EDB
+      Roles:
+        - Ref: ConnectServiceRole07B61CE8
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Connect/ServiceRole/DefaultPolicy/Resource
+  Connect5B7625CA:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: >-
+            AssetParameters0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4S3Bucket40E0E393
+        S3Key:
+          Fn::Join:
+            - ''
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - '||'
+                      - Ref: >-
+                          AssetParameters0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4S3VersionKey32A15DAE
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - '||'
+                      - Ref: >-
+                          AssetParameters0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4S3VersionKey32A15DAE
+      Role:
+        Fn::GetAtt:
+          - ConnectServiceRole07B61CE8
+          - Arn
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: TableCD117FA1
+      Handler: wsConnect.main
+      MemorySize: 256
+      Runtime: nodejs12.x
+      Timeout: 10
+    DependsOn:
+      - ConnectServiceRoleDefaultPolicyCE008EDB
+      - ConnectServiceRole07B61CE8
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Connect/Resource
+      aws:asset:path: asset.0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4
+      aws:asset:property: Code
+  ConnectLogRetentionC1F463CD:
+    Type: Custom::LogRetention
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A
+          - Arn
+      LogGroupName:
+        Fn::Join:
+          - ''
+          - - /aws/lambda/
+            - Ref: Connect5B7625CA
+      RetentionInDays: 7
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Connect/LogRetention/Resource
+  ConnectConnectPermission9DBC7813:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - Connect5B7625CA
+          - Arn
+      Principal: apigateway.amazonaws.com
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Connect/ConnectPermission
+  LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: '2012-10-17'
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ''
+            - - 'arn:'
+              - Ref: AWS::Partition
+              - ':iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+    Metadata:
+      aws:cdk:path: >-
+        admin-notes-debug-stack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource
+  LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - logs:PutRetentionPolicy
+              - logs:DeleteRetentionPolicy
+            Effect: Allow
+            Resource: '*'
+        Version: '2012-10-17'
+      PolicyName: >-
+        LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB
+      Roles:
+        - Ref: LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB
+    Metadata:
+      aws:cdk:path: >-
+        admin-notes-debug-stack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource
+  LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs14.x
+      Code:
+        S3Bucket:
+          Ref: >-
+            AssetParametersb120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827S3Bucket2070BA0A
+        S3Key:
+          Fn::Join:
+            - ''
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - '||'
+                      - Ref: >-
+                          AssetParametersb120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827S3VersionKeyB95D17C3
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - '||'
+                      - Ref: >-
+                          AssetParametersb120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827S3VersionKeyB95D17C3
+      Role:
+        Fn::GetAtt:
+          - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB
+          - Arn
+    DependsOn:
+      - >-
+        LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB
+      - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB
+    Metadata:
+      aws:cdk:path: >-
+        admin-notes-debug-stack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource
+  ConnectIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId:
+        Ref: Api
+      IntegrationType: AWS_PROXY
+      IntegrationUri:
+        Fn::Join:
+          - ''
+          - - arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/
+            - Fn::GetAtt:
+                - Connect5B7625CA
+                - Arn
+            - /invocations
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/ConnectIntegration
+  ConnectRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId:
+        Ref: Api
+      RouteKey: $connect
+      AuthorizationType: NONE
+      Target:
+        Fn::Join:
+          - ''
+          - - integrations/
+            - Ref: ConnectIntegration
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/ConnectRoute
+  DisconnectServiceRole90AEC2EB:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: '2012-10-17'
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ''
+            - - 'arn:'
+              - Ref: AWS::Partition
+              - ':iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Disconnect/ServiceRole/Resource
+  DisconnectServiceRoleDefaultPolicy32856207:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - apigateway:*
+              - dynamodb:*
+              - execute-api:ManageConnections
+            Effect: Allow
+            Resource: '*'
+        Version: '2012-10-17'
+      PolicyName: DisconnectServiceRoleDefaultPolicy32856207
+      Roles:
+        - Ref: DisconnectServiceRole90AEC2EB
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Disconnect/ServiceRole/DefaultPolicy/Resource
+  Disconnect7D6B12BD:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: >-
+            AssetParameters0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4S3Bucket40E0E393
+        S3Key:
+          Fn::Join:
+            - ''
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - '||'
+                      - Ref: >-
+                          AssetParameters0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4S3VersionKey32A15DAE
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - '||'
+                      - Ref: >-
+                          AssetParameters0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4S3VersionKey32A15DAE
+      Role:
+        Fn::GetAtt:
+          - DisconnectServiceRole90AEC2EB
+          - Arn
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: TableCD117FA1
+      Handler: wsDisconnect.main
+      MemorySize: 256
+      Runtime: nodejs12.x
+      Timeout: 10
+    DependsOn:
+      - DisconnectServiceRoleDefaultPolicy32856207
+      - DisconnectServiceRole90AEC2EB
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Disconnect/Resource
+      aws:asset:path: asset.0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4
+      aws:asset:property: Code
+  DisconnectLogRetentionE61D7937:
+    Type: Custom::LogRetention
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A
+          - Arn
+      LogGroupName:
+        Fn::Join:
+          - ''
+          - - /aws/lambda/
+            - Ref: Disconnect7D6B12BD
+      RetentionInDays: 7
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Disconnect/LogRetention/Resource
+  DisconnectDisconnectPermission933E876E:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - Disconnect7D6B12BD
+          - Arn
+      Principal: apigateway.amazonaws.com
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Disconnect/DisconnectPermission
+  DisconnectIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId:
+        Ref: Api
+      IntegrationType: AWS_PROXY
+      IntegrationUri:
+        Fn::Join:
+          - ''
+          - - arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/
+            - Fn::GetAtt:
+                - Disconnect7D6B12BD
+                - Arn
+            - /invocations
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/DisconnectIntegration
+  DisconnectRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId:
+        Ref: Api
+      RouteKey: $disconnect
+      AuthorizationType: NONE
+      Target:
+        Fn::Join:
+          - ''
+          - - integrations/
+            - Ref: DisconnectIntegration
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/DisconnectRoute
+  ServiceRole4288B192:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: '2012-10-17'
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ''
+            - - 'arn:'
+              - Ref: AWS::Partition
+              - ':iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Default/ServiceRole/Resource
+  ServiceRoleDefaultPolicy94CF55F6:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - apigateway:*
+              - dynamodb:*
+              - execute-api:ManageConnections
+            Effect: Allow
+            Resource: '*'
+        Version: '2012-10-17'
+      PolicyName: ServiceRoleDefaultPolicy94CF55F6
+      Roles:
+        - Ref: ServiceRole4288B192
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Default/ServiceRole/DefaultPolicy/Resource
+  Resource:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: >-
+            AssetParameters0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4S3Bucket40E0E393
+        S3Key:
+          Fn::Join:
+            - ''
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - '||'
+                      - Ref: >-
+                          AssetParameters0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4S3VersionKey32A15DAE
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - '||'
+                      - Ref: >-
+                          AssetParameters0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4S3VersionKey32A15DAE
+      Role:
+        Fn::GetAtt:
+          - ServiceRole4288B192
+          - Arn
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: TableCD117FA1
+      Handler: wsDefault.main
+      MemorySize: 256
+      Runtime: nodejs12.x
+      Timeout: 10
+    DependsOn:
+      - ServiceRoleDefaultPolicy94CF55F6
+      - ServiceRole4288B192
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Default/Resource
+      aws:asset:path: asset.0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4
+      aws:asset:property: Code
+  LogRetentionDD0A1FA1:
+    Type: Custom::LogRetention
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A
+          - Arn
+      LogGroupName:
+        Fn::Join:
+          - ''
+          - - /aws/lambda/
+            - Ref: Resource
+      RetentionInDays: 7
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Default/LogRetention/Resource
+  DefaultPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - Resource
+          - Arn
+      Principal: apigateway.amazonaws.com
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/Default/DefaultPermission
+  DefaultIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId:
+        Ref: Api
+      IntegrationType: AWS_PROXY
+      IntegrationUri:
+        Fn::Join:
+          - ''
+          - - arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/
+            - Fn::GetAtt:
+                - Resource
+                - Arn
+            - /invocations
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/DefaultIntegration
+  DefaultRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId:
+        Ref: Api
+      RouteKey: $default
+      AuthorizationType: NONE
+      Target:
+        Fn::Join:
+          - ''
+          - - integrations/
+            - Ref: DefaultIntegration
+    Metadata:
+      aws:cdk:path: admin-notes-debug-stack/DefaultRoute
+Parameters:
+  AssetParameters1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1S3Bucket4842F32D:
+    Type: String
+    Description: >-
+      S3 bucket for asset
+      "1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1"
+  AssetParameters1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1S3VersionKeyD0A0B57A:
+    Type: String
+    Description: >-
+      S3 key for asset version
+      "1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1"
+  AssetParameters1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1ArtifactHash0128B949:
+    Type: String
+    Description: >-
+      Artifact hash for asset
+      "1f7e277bd526ebce1983fa1e7a84a5281ec533d9187caaebb773681bbf7bf4c1"
+  AssetParameters0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4S3Bucket40E0E393:
+    Type: String
+    Description: >-
+      S3 bucket for asset
+      "0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4"
+  AssetParameters0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4S3VersionKey32A15DAE:
+    Type: String
+    Description: >-
+      S3 key for asset version
+      "0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4"
+  AssetParameters0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4ArtifactHashC679FCC4:
+    Type: String
+    Description: >-
+      Artifact hash for asset
+      "0d89df84ea307d9cb0d70fbd76481e4e86f449d075a2a082cc2d323ee69a98e4"
+  AssetParametersb120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827S3Bucket2070BA0A:
+    Type: String
+    Description: >-
+      S3 bucket for asset
+      "b120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827"
+  AssetParametersb120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827S3VersionKeyB95D17C3:
+    Type: String
+    Description: >-
+      S3 key for asset version
+      "b120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827"
+  AssetParametersb120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827ArtifactHash1355580A:
+    Type: String
+    Description: >-
+      Artifact hash for asset
+      "b120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827"
+Outputs:
+  Endpoint:
+    Value:
+      Fn::Join:
+        - ''
+        - - Fn::GetAtt:
+              - Api
+              - ApiEndpoint
+          - /admin
+  BucketArn:
+    Value:
+      Fn::GetAtt:
+        - Bucket83908E77
+        - Arn
+  BucketName:
+    Value:
+      Ref: Bucket83908E77
+
+[2022-02-25T19:39:57.035] [DEBUG] core - deploy stack: check template changed: unchanged
+[2022-02-25T19:39:57.035] [DEBUG] core - deploy stack: done admin-notes-debug-stack {
+  status: 'unchanged',
+  statusReason: undefined,
+  account: '337099998523',
+  outputs: {
+    BucketArn: 'arn:aws:s3:::admin-notes-debug-stack-bucket83908e77-4on2f8oujx6g',
+    BucketName: 'admin-notes-debug-stack-bucket83908e77-4on2f8oujx6g',
+    Endpoint: 'wss://kic4fzf5v0.execute-api.us-east-1.amazonaws.com/admin'
+  },
+  exports: {}
+}
+[2022-02-25T19:39:57.035] [INFO] core - [32m[39m
+[32m ✅  admin-notes-debug-stack (no changes)[39m
+[32m[39m
+[2022-02-25T19:39:57.035] [DEBUG] core - At least 1 stack successfully deployed, call deployStacks() again
+[2022-02-25T19:39:57.035] [TRACE] core - After deploy stacks: [{"name":"admin-notes-debug-stack","status":"unchanged","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645835997035,"endedAt":1645835997035,"events":[],"outputs":{"BucketArn":"arn:aws:s3:::admin-notes-debug-stack-bucket83908e77-4on2f8oujx6g","BucketName":"admin-notes-debug-stack-bucket83908e77-4on2f8oujx6g","Endpoint":"wss://kic4fzf5v0.execute-api.us-east-1.amazonaws.com/admin"},"exports":{}}]
+[2022-02-25T19:39:57.035] [INFO] default - 
+Stack admin-notes-debug-stack
+[2022-02-25T19:39:57.036] [INFO] default -   Status: no changes
+[2022-02-25T19:39:57.036] [INFO] default -   Outputs:
+[2022-02-25T19:39:57.036] [INFO] default -     BucketArn: arn:aws:s3:::admin-notes-debug-stack-bucket83908e77-4on2f8oujx6g
+[2022-02-25T19:39:57.036] [INFO] default -     BucketName: admin-notes-debug-stack-bucket83908e77-4on2f8oujx6g
+[2022-02-25T19:39:57.036] [INFO] default -     Endpoint: wss://kic4fzf5v0.execute-api.us-east-1.amazonaws.com/admin
+[2022-02-25T19:39:57.036] [INFO] default - 
+[2022-02-25T19:39:57.036] [DEBUG] default - deployRet [
+  {
+    name: 'admin-notes-debug-stack',
+    status: 'unchanged',
+    errorMessage: undefined,
+    outputs: {
+      BucketArn: 'arn:aws:s3:::admin-notes-debug-stack-bucket83908e77-4on2f8oujx6g',
+      BucketName: 'admin-notes-debug-stack-bucket83908e77-4on2f8oujx6g',
+      Endpoint: 'wss://kic4fzf5v0.execute-api.us-east-1.amazonaws.com/admin'
+    },
+    exports: {}
+  }
+]
+[2022-02-25T19:39:57.037] [INFO] default - 
+[2022-02-25T19:39:57.037] [INFO] default - ===============
+[2022-02-25T19:39:57.037] [INFO] default -  Deploying app
+[2022-02-25T19:39:57.037] [INFO] default - ===============
+[2022-02-25T19:39:57.038] [INFO] default - 
+[2022-02-25T19:39:57.038] [DEBUG] core - synth {
+  output: '.build/cdk.out',
+  app: 'node .build/run.js',
+  rollback: false,
+  roleArn: undefined,
+  verbose: 0,
+  noColor: false
+}
+[2022-02-25T19:39:57.099] [TRACE] cdk - [43m[30m!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!![39m[49m
+
+[2022-02-25T19:39:57.100] [TRACE] cdk - [43m[30m!!                                                                                  !![39m[49m
+[43m[30m!!  This software has not been tested with node v17.1.0.                            !![39m[49m
+[43m[30m!!  You may to encounter runtime issues, and should switch to a supported release.  !![39m[49m
+[43m[30m!!                                                                                  !![39m[49m
+[43m[30m!!  As of the current release, supported versions of node are:                      !![39m[49m
+[43m[30m!!  - ^12.7.0                                                                       !![39m[49m
+[43m[30m!!  - ^14.5.0                                                                       !![39m[49m
+[43m[30m!!  - ^16.3.0                                                                       !![39m[49m
+[43m[30m!!                                                                                  !![39m[49m
+[43m[30m!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!![39m[49m
+
+[2022-02-25T19:39:57.787] [INFO] default - [90mDeploying stacks[39m
+[2022-02-25T19:39:57.787] [TRACE] core - Initial stack states: [{"name":"admin-notes-storage","status":"pending","dependencies":[],"region":"us-east-1","events":[]}]
+[2022-02-25T19:39:57.787] [TRACE] core - After update deploy statuses: [{"name":"admin-notes-storage","status":"pending","dependencies":[],"region":"us-east-1","events":[]}]
+[2022-02-25T19:39:57.788] [DEBUG] core - deploy stack: started admin-notes-storage
+[2022-02-25T19:39:57.788] [DEBUG] core - deploy stack: get pre-deploy status
+[2022-02-25T19:39:58.064] [DEBUG] constructs-state - [AWS cloudformation 400 0.275s 0 retries] describeStacks({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:39:58.065] [DEBUG] core - deploy stack: get pre-deploy status: stack does not exist
+[2022-02-25T19:39:58.065] [DEBUG] core - deploy stack: check template changed
+[2022-02-25T19:39:58.065] [DEBUG] core - deploy stack: run cdk deploy
+[2022-02-25T19:39:58.073] [DEBUG] core - deploy stack: poll stack status
+[2022-02-25T19:39:58.160] [TRACE] core - deploy stack: run cdk deploy: stderr: [43m[30m!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!![39m[49m
+
+[2022-02-25T19:39:58.160] [TRACE] core - deploy stack: run cdk deploy: stderr: [43m[30m!!                                                                                  !![39m[49m
+[43m[30m!!  This software has not been tested with node v17.1.0.                            !![39m[49m
+[43m[30m!!  You may to encounter runtime issues, and should switch to a supported release.  !![39m[49m
+[43m[30m!!                                                                                  !![39m[49m
+[43m[30m!!  As of the current release, supported versions of node are:                      !![39m[49m
+[43m[30m!!  - ^12.7.0                                                                       !![39m[49m
+[43m[30m!!  - ^14.5.0                                                                       !![39m[49m
+[43m[30m!!  - ^16.3.0                                                                       !![39m[49m
+
+[2022-02-25T19:39:58.160] [TRACE] core - deploy stack: run cdk deploy: stderr: [43m[30m!!                                                                                  !![39m[49m
+[43m[30m!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!![39m[49m
+
+[2022-02-25T19:39:58.324] [DEBUG] constructs-state - [AWS cloudformation 400 0.25s 0 retries] describeStacks({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:39:58.325] [DEBUG] core - deploy stack: poll stack status: unknown
+[2022-02-25T19:39:58.379] [TRACE] core - deploy stack: run cdk deploy: stderr: admin-notes-storage: deploying...
+
+[2022-02-25T19:39:58.947] [TRACE] core - deploy stack: run cdk deploy: stderr: admin-notes-storage: creating CloudFormation changeset...
+
+[2022-02-25T19:40:01.657] [DEBUG] constructs-state - [AWS cloudformation 200 0.33s 0 retries] describeStacks({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:40:01.658] [DEBUG] core - deploy stack: poll stack status: { StackStatus: 'REVIEW_IN_PROGRESS', LastUpdatedTime: undefined }
+[2022-02-25T19:40:01.658] [DEBUG] core - deploy stack: poll stack status: cf update will start
+[2022-02-25T19:40:04.973] [DEBUG] constructs-state - [AWS cloudformation 200 0.307s 0 retries] describeStacks({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:40:04.974] [DEBUG] core - deploy stack: poll stack status: { StackStatus: 'REVIEW_IN_PROGRESS', LastUpdatedTime: undefined }
+[2022-02-25T19:40:04.974] [DEBUG] core - deploy stack: poll stack status: cf update will start
+[2022-02-25T19:40:08.224] [DEBUG] constructs-state - [AWS cloudformation 200 0.243s 0 retries] describeStacks({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:40:08.226] [DEBUG] core - deploy stack: poll stack status: { StackStatus: 'REVIEW_IN_PROGRESS', LastUpdatedTime: undefined }
+[2022-02-25T19:40:08.226] [DEBUG] core - deploy stack: poll stack status: cf update will start
+[2022-02-25T19:40:11.501] [DEBUG] constructs-state - [AWS cloudformation 200 0.268s 0 retries] describeStacks({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:40:11.502] [DEBUG] core - deploy stack: poll stack status: {
+  StackStatus: 'CREATE_IN_PROGRESS',
+  LastUpdatedTime: 2022-02-26T00:40:10.749Z
+}
+[2022-02-25T19:40:11.503] [DEBUG] core - deploy stack: poll stack status: cf update started
+[2022-02-25T19:40:11.503] [DEBUG] core - deploy stack: done admin-notes-storage {
+  status: 'deploying',
+  statusReason: undefined,
+  account: '337099998523',
+  outputs: {},
+  exports: {}
+}
+[2022-02-25T19:40:11.504] [TRACE] core - After deploy stacks: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836011504,"events":[],"outputs":{},"exports":{}}]
+[2022-02-25T19:40:11.504] [INFO] default - Checking deploy status...
+[2022-02-25T19:40:11.517] [DEBUG] core - deploy stack: run cdk deploy: exited with code null
+[2022-02-25T19:40:16.507] [TRACE] core - Initial stack states: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836011504,"events":[],"outputs":{},"exports":{}}]
+[2022-02-25T19:40:16.509] [DEBUG] core - Fetching stack events admin-notes-storage
+[2022-02-25T19:40:16.809] [DEBUG] constructs-state - [AWS cloudformation 200 0.297s 0 retries] describeStackEvents({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:40:16.810] [INFO] core - admin-notes-storage | [0mCREATE_IN_PROGRESS[0m | AWS::CloudFormation::Stack | [0m[1madmin-notes-storage[22m[0m 
+[2022-02-25T19:40:16.810] [INFO] core - admin-notes-storage | [0mCREATE_IN_PROGRESS[0m | AWS::CDK::Metadata | [0m[1mSSTMetadata[22m[0m 
+[2022-02-25T19:40:16.811] [INFO] core - admin-notes-storage | [0mCREATE_IN_PROGRESS[0m | AWS::DynamoDB::Table | [0m[1mNotesTable7100B0E8[22m[0m 
+[2022-02-25T19:40:16.811] [DEBUG] core - Checking stack status admin-notes-storage
+[2022-02-25T19:40:17.073] [DEBUG] constructs-state - [AWS cloudformation 200 0.261s 0 retries] describeStacks({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:40:17.074] [TRACE] core - After update deploy statuses: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836011504,"events":[{"eventId":"a74d5350-969c-11ec-8363-0a0220dc9827","timestamp":"2022-02-26T00:40:10.749Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:16.309Z","timestamp":"2022-02-26T00:40:16.309Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"SSTMetadata"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:16.511Z","timestamp":"2022-02-26T00:40:16.511Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"NotesTable7100B0E8"}],"eventsFirstEventAt":"2022-02-26T00:40:05.749Z","outputs":{},"exports":{}}]
+[2022-02-25T19:40:17.075] [TRACE] core - After deploy stacks: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836011504,"events":[{"eventId":"a74d5350-969c-11ec-8363-0a0220dc9827","timestamp":"2022-02-26T00:40:10.749Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:16.309Z","timestamp":"2022-02-26T00:40:16.309Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"SSTMetadata"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:16.511Z","timestamp":"2022-02-26T00:40:16.511Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"NotesTable7100B0E8"}],"eventsFirstEventAt":"2022-02-26T00:40:05.749Z","outputs":{},"exports":{}}]
+[2022-02-25T19:40:22.081] [TRACE] core - Initial stack states: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836011504,"events":[{"eventId":"a74d5350-969c-11ec-8363-0a0220dc9827","timestamp":"2022-02-26T00:40:10.749Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:16.309Z","timestamp":"2022-02-26T00:40:16.309Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"SSTMetadata"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:16.511Z","timestamp":"2022-02-26T00:40:16.511Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"NotesTable7100B0E8"}],"eventsFirstEventAt":"2022-02-26T00:40:05.749Z","outputs":{},"exports":{}}]
+[2022-02-25T19:40:22.082] [DEBUG] core - Fetching stack events admin-notes-storage
+[2022-02-25T19:40:22.372] [DEBUG] constructs-state - [AWS cloudformation 200 0.288s 0 retries] describeStackEvents({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:40:22.373] [INFO] core - admin-notes-storage | [0mCREATE_IN_PROGRESS[0m | AWS::DynamoDB::Table | [0m[1mNotesTable7100B0E8[22m[0m 
+[2022-02-25T19:40:22.374] [INFO] core - admin-notes-storage | [0mCREATE_IN_PROGRESS[0m | AWS::CDK::Metadata | [0m[1mSSTMetadata[22m[0m 
+[2022-02-25T19:40:22.374] [INFO] core - admin-notes-storage | [32mCREATE_COMPLETE[39m | AWS::CDK::Metadata | [32m[1mSSTMetadata[22m[39m 
+[2022-02-25T19:40:22.375] [DEBUG] core - Checking stack status admin-notes-storage
+[2022-02-25T19:40:22.620] [DEBUG] constructs-state - [AWS cloudformation 200 0.245s 0 retries] describeStacks({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:40:22.621] [TRACE] core - After update deploy statuses: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836011504,"events":[{"eventId":"a74d5350-969c-11ec-8363-0a0220dc9827","timestamp":"2022-02-26T00:40:10.749Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:16.309Z","timestamp":"2022-02-26T00:40:16.309Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"SSTMetadata"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:16.511Z","timestamp":"2022-02-26T00:40:16.511Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:17.454Z","timestamp":"2022-02-26T00:40:17.454Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:18.260Z","timestamp":"2022-02-26T00:40:18.260Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"SSTMetadata"},{"eventId":"SSTMetadata-CREATE_COMPLETE-2022-02-26T00:40:18.429Z","timestamp":"2022-02-26T00:40:18.429Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_COMPLETE","logicalResourceId":"SSTMetadata"}],"eventsFirstEventAt":"2022-02-26T00:40:05.749Z","outputs":{},"exports":{}}]
+[2022-02-25T19:40:22.622] [TRACE] core - After deploy stacks: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836011504,"events":[{"eventId":"a74d5350-969c-11ec-8363-0a0220dc9827","timestamp":"2022-02-26T00:40:10.749Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:16.309Z","timestamp":"2022-02-26T00:40:16.309Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"SSTMetadata"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:16.511Z","timestamp":"2022-02-26T00:40:16.511Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:17.454Z","timestamp":"2022-02-26T00:40:17.454Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:18.260Z","timestamp":"2022-02-26T00:40:18.260Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"SSTMetadata"},{"eventId":"SSTMetadata-CREATE_COMPLETE-2022-02-26T00:40:18.429Z","timestamp":"2022-02-26T00:40:18.429Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_COMPLETE","logicalResourceId":"SSTMetadata"}],"eventsFirstEventAt":"2022-02-26T00:40:05.749Z","outputs":{},"exports":{}}]
+[2022-02-25T19:40:27.627] [TRACE] core - Initial stack states: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836011504,"events":[{"eventId":"a74d5350-969c-11ec-8363-0a0220dc9827","timestamp":"2022-02-26T00:40:10.749Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:16.309Z","timestamp":"2022-02-26T00:40:16.309Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"SSTMetadata"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:16.511Z","timestamp":"2022-02-26T00:40:16.511Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:17.454Z","timestamp":"2022-02-26T00:40:17.454Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:18.260Z","timestamp":"2022-02-26T00:40:18.260Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"SSTMetadata"},{"eventId":"SSTMetadata-CREATE_COMPLETE-2022-02-26T00:40:18.429Z","timestamp":"2022-02-26T00:40:18.429Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_COMPLETE","logicalResourceId":"SSTMetadata"}],"eventsFirstEventAt":"2022-02-26T00:40:05.749Z","outputs":{},"exports":{}}]
+[2022-02-25T19:40:27.628] [DEBUG] core - Fetching stack events admin-notes-storage
+[2022-02-25T19:40:27.871] [DEBUG] constructs-state - [AWS cloudformation 200 0.241s 0 retries] describeStackEvents({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:40:27.873] [DEBUG] core - Checking stack status admin-notes-storage
+[2022-02-25T19:40:28.119] [DEBUG] constructs-state - [AWS cloudformation 200 0.246s 0 retries] describeStacks({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:40:28.121] [TRACE] core - After update deploy statuses: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836011504,"events":[{"eventId":"a74d5350-969c-11ec-8363-0a0220dc9827","timestamp":"2022-02-26T00:40:10.749Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:16.309Z","timestamp":"2022-02-26T00:40:16.309Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"SSTMetadata"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:16.511Z","timestamp":"2022-02-26T00:40:16.511Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:17.454Z","timestamp":"2022-02-26T00:40:17.454Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:18.260Z","timestamp":"2022-02-26T00:40:18.260Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"SSTMetadata"},{"eventId":"SSTMetadata-CREATE_COMPLETE-2022-02-26T00:40:18.429Z","timestamp":"2022-02-26T00:40:18.429Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_COMPLETE","logicalResourceId":"SSTMetadata"}],"eventsFirstEventAt":"2022-02-26T00:40:05.749Z","outputs":{},"exports":{}}]
+[2022-02-25T19:40:28.121] [TRACE] core - After deploy stacks: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836011504,"events":[{"eventId":"a74d5350-969c-11ec-8363-0a0220dc9827","timestamp":"2022-02-26T00:40:10.749Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:16.309Z","timestamp":"2022-02-26T00:40:16.309Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"SSTMetadata"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:16.511Z","timestamp":"2022-02-26T00:40:16.511Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:17.454Z","timestamp":"2022-02-26T00:40:17.454Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:18.260Z","timestamp":"2022-02-26T00:40:18.260Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"SSTMetadata"},{"eventId":"SSTMetadata-CREATE_COMPLETE-2022-02-26T00:40:18.429Z","timestamp":"2022-02-26T00:40:18.429Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_COMPLETE","logicalResourceId":"SSTMetadata"}],"eventsFirstEventAt":"2022-02-26T00:40:05.749Z","outputs":{},"exports":{}}]
+[2022-02-25T19:40:28.122] [INFO] default - Checking deploy status...
+[2022-02-25T19:40:33.127] [TRACE] core - Initial stack states: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836011504,"events":[{"eventId":"a74d5350-969c-11ec-8363-0a0220dc9827","timestamp":"2022-02-26T00:40:10.749Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:16.309Z","timestamp":"2022-02-26T00:40:16.309Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"SSTMetadata"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:16.511Z","timestamp":"2022-02-26T00:40:16.511Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:17.454Z","timestamp":"2022-02-26T00:40:17.454Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:18.260Z","timestamp":"2022-02-26T00:40:18.260Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"SSTMetadata"},{"eventId":"SSTMetadata-CREATE_COMPLETE-2022-02-26T00:40:18.429Z","timestamp":"2022-02-26T00:40:18.429Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_COMPLETE","logicalResourceId":"SSTMetadata"}],"eventsFirstEventAt":"2022-02-26T00:40:05.749Z","outputs":{},"exports":{}}]
+[2022-02-25T19:40:33.128] [DEBUG] core - Fetching stack events admin-notes-storage
+[2022-02-25T19:40:33.383] [DEBUG] constructs-state - [AWS cloudformation 200 0.254s 0 retries] describeStackEvents({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:40:33.384] [DEBUG] core - Checking stack status admin-notes-storage
+[2022-02-25T19:40:33.627] [DEBUG] constructs-state - [AWS cloudformation 200 0.242s 0 retries] describeStacks({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:40:33.629] [TRACE] core - After update deploy statuses: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836011504,"events":[{"eventId":"a74d5350-969c-11ec-8363-0a0220dc9827","timestamp":"2022-02-26T00:40:10.749Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:16.309Z","timestamp":"2022-02-26T00:40:16.309Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"SSTMetadata"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:16.511Z","timestamp":"2022-02-26T00:40:16.511Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:17.454Z","timestamp":"2022-02-26T00:40:17.454Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:18.260Z","timestamp":"2022-02-26T00:40:18.260Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"SSTMetadata"},{"eventId":"SSTMetadata-CREATE_COMPLETE-2022-02-26T00:40:18.429Z","timestamp":"2022-02-26T00:40:18.429Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_COMPLETE","logicalResourceId":"SSTMetadata"}],"eventsFirstEventAt":"2022-02-26T00:40:05.749Z","outputs":{},"exports":{}}]
+[2022-02-25T19:40:33.629] [TRACE] core - After deploy stacks: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836011504,"events":[{"eventId":"a74d5350-969c-11ec-8363-0a0220dc9827","timestamp":"2022-02-26T00:40:10.749Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:16.309Z","timestamp":"2022-02-26T00:40:16.309Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"SSTMetadata"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:16.511Z","timestamp":"2022-02-26T00:40:16.511Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:17.454Z","timestamp":"2022-02-26T00:40:17.454Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:18.260Z","timestamp":"2022-02-26T00:40:18.260Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"SSTMetadata"},{"eventId":"SSTMetadata-CREATE_COMPLETE-2022-02-26T00:40:18.429Z","timestamp":"2022-02-26T00:40:18.429Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_COMPLETE","logicalResourceId":"SSTMetadata"}],"eventsFirstEventAt":"2022-02-26T00:40:05.749Z","outputs":{},"exports":{}}]
+[2022-02-25T19:40:33.629] [INFO] default - Checking deploy status...
+[2022-02-25T19:40:38.635] [TRACE] core - Initial stack states: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836011504,"events":[{"eventId":"a74d5350-969c-11ec-8363-0a0220dc9827","timestamp":"2022-02-26T00:40:10.749Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:16.309Z","timestamp":"2022-02-26T00:40:16.309Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"SSTMetadata"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:16.511Z","timestamp":"2022-02-26T00:40:16.511Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:17.454Z","timestamp":"2022-02-26T00:40:17.454Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:18.260Z","timestamp":"2022-02-26T00:40:18.260Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"SSTMetadata"},{"eventId":"SSTMetadata-CREATE_COMPLETE-2022-02-26T00:40:18.429Z","timestamp":"2022-02-26T00:40:18.429Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_COMPLETE","logicalResourceId":"SSTMetadata"}],"eventsFirstEventAt":"2022-02-26T00:40:05.749Z","outputs":{},"exports":{}}]
+[2022-02-25T19:40:38.636] [DEBUG] core - Fetching stack events admin-notes-storage
+[2022-02-25T19:40:38.910] [DEBUG] constructs-state - [AWS cloudformation 200 0.272s 0 retries] describeStackEvents({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:40:38.911] [DEBUG] core - Checking stack status admin-notes-storage
+[2022-02-25T19:40:39.235] [DEBUG] constructs-state - [AWS cloudformation 200 0.323s 0 retries] describeStacks({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:40:39.236] [TRACE] core - After update deploy statuses: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836011504,"events":[{"eventId":"a74d5350-969c-11ec-8363-0a0220dc9827","timestamp":"2022-02-26T00:40:10.749Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:16.309Z","timestamp":"2022-02-26T00:40:16.309Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"SSTMetadata"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:16.511Z","timestamp":"2022-02-26T00:40:16.511Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:17.454Z","timestamp":"2022-02-26T00:40:17.454Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:18.260Z","timestamp":"2022-02-26T00:40:18.260Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"SSTMetadata"},{"eventId":"SSTMetadata-CREATE_COMPLETE-2022-02-26T00:40:18.429Z","timestamp":"2022-02-26T00:40:18.429Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_COMPLETE","logicalResourceId":"SSTMetadata"}],"eventsFirstEventAt":"2022-02-26T00:40:05.749Z","outputs":{},"exports":{}}]
+[2022-02-25T19:40:39.236] [TRACE] core - After deploy stacks: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836011504,"events":[{"eventId":"a74d5350-969c-11ec-8363-0a0220dc9827","timestamp":"2022-02-26T00:40:10.749Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:16.309Z","timestamp":"2022-02-26T00:40:16.309Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"SSTMetadata"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:16.511Z","timestamp":"2022-02-26T00:40:16.511Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:17.454Z","timestamp":"2022-02-26T00:40:17.454Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:18.260Z","timestamp":"2022-02-26T00:40:18.260Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"SSTMetadata"},{"eventId":"SSTMetadata-CREATE_COMPLETE-2022-02-26T00:40:18.429Z","timestamp":"2022-02-26T00:40:18.429Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_COMPLETE","logicalResourceId":"SSTMetadata"}],"eventsFirstEventAt":"2022-02-26T00:40:05.749Z","outputs":{},"exports":{}}]
+[2022-02-25T19:40:39.237] [INFO] default - Checking deploy status...
+[2022-02-25T19:40:44.242] [TRACE] core - Initial stack states: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836011504,"events":[{"eventId":"a74d5350-969c-11ec-8363-0a0220dc9827","timestamp":"2022-02-26T00:40:10.749Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:16.309Z","timestamp":"2022-02-26T00:40:16.309Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"SSTMetadata"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:16.511Z","timestamp":"2022-02-26T00:40:16.511Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:17.454Z","timestamp":"2022-02-26T00:40:17.454Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:18.260Z","timestamp":"2022-02-26T00:40:18.260Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"SSTMetadata"},{"eventId":"SSTMetadata-CREATE_COMPLETE-2022-02-26T00:40:18.429Z","timestamp":"2022-02-26T00:40:18.429Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_COMPLETE","logicalResourceId":"SSTMetadata"}],"eventsFirstEventAt":"2022-02-26T00:40:05.749Z","outputs":{},"exports":{}}]
+[2022-02-25T19:40:44.243] [DEBUG] core - Fetching stack events admin-notes-storage
+[2022-02-25T19:40:44.494] [DEBUG] constructs-state - [AWS cloudformation 200 0.248s 0 retries] describeStackEvents({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:40:44.495] [DEBUG] core - Checking stack status admin-notes-storage
+[2022-02-25T19:40:44.776] [DEBUG] constructs-state - [AWS cloudformation 200 0.28s 0 retries] describeStacks({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:40:44.777] [TRACE] core - After update deploy statuses: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836011504,"events":[{"eventId":"a74d5350-969c-11ec-8363-0a0220dc9827","timestamp":"2022-02-26T00:40:10.749Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:16.309Z","timestamp":"2022-02-26T00:40:16.309Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"SSTMetadata"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:16.511Z","timestamp":"2022-02-26T00:40:16.511Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:17.454Z","timestamp":"2022-02-26T00:40:17.454Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:18.260Z","timestamp":"2022-02-26T00:40:18.260Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"SSTMetadata"},{"eventId":"SSTMetadata-CREATE_COMPLETE-2022-02-26T00:40:18.429Z","timestamp":"2022-02-26T00:40:18.429Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_COMPLETE","logicalResourceId":"SSTMetadata"}],"eventsFirstEventAt":"2022-02-26T00:40:05.749Z","outputs":{},"exports":{}}]
+[2022-02-25T19:40:44.778] [TRACE] core - After deploy stacks: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836011504,"events":[{"eventId":"a74d5350-969c-11ec-8363-0a0220dc9827","timestamp":"2022-02-26T00:40:10.749Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:16.309Z","timestamp":"2022-02-26T00:40:16.309Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"SSTMetadata"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:16.511Z","timestamp":"2022-02-26T00:40:16.511Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:17.454Z","timestamp":"2022-02-26T00:40:17.454Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:18.260Z","timestamp":"2022-02-26T00:40:18.260Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"SSTMetadata"},{"eventId":"SSTMetadata-CREATE_COMPLETE-2022-02-26T00:40:18.429Z","timestamp":"2022-02-26T00:40:18.429Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_COMPLETE","logicalResourceId":"SSTMetadata"}],"eventsFirstEventAt":"2022-02-26T00:40:05.749Z","outputs":{},"exports":{}}]
+[2022-02-25T19:40:44.778] [INFO] default - Checking deploy status...
+[2022-02-25T19:40:49.784] [TRACE] core - Initial stack states: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836011504,"events":[{"eventId":"a74d5350-969c-11ec-8363-0a0220dc9827","timestamp":"2022-02-26T00:40:10.749Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:16.309Z","timestamp":"2022-02-26T00:40:16.309Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"SSTMetadata"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:16.511Z","timestamp":"2022-02-26T00:40:16.511Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:17.454Z","timestamp":"2022-02-26T00:40:17.454Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:18.260Z","timestamp":"2022-02-26T00:40:18.260Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"SSTMetadata"},{"eventId":"SSTMetadata-CREATE_COMPLETE-2022-02-26T00:40:18.429Z","timestamp":"2022-02-26T00:40:18.429Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_COMPLETE","logicalResourceId":"SSTMetadata"}],"eventsFirstEventAt":"2022-02-26T00:40:05.749Z","outputs":{},"exports":{}}]
+[2022-02-25T19:40:49.785] [DEBUG] core - Fetching stack events admin-notes-storage
+[2022-02-25T19:40:50.051] [DEBUG] constructs-state - [AWS cloudformation 200 0.265s 0 retries] describeStackEvents({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:40:50.053] [INFO] core - admin-notes-storage | [32mCREATE_COMPLETE[39m | AWS::DynamoDB::Table | [32m[1mNotesTable7100B0E8[22m[39m 
+[2022-02-25T19:40:50.053] [INFO] core - admin-notes-storage | [32mCREATE_COMPLETE[39m | AWS::CloudFormation::Stack | [32m[1madmin-notes-storage[22m[39m 
+[2022-02-25T19:40:50.054] [DEBUG] core - Checking stack status admin-notes-storage
+[2022-02-25T19:40:50.288] [DEBUG] constructs-state - [AWS cloudformation 200 0.234s 0 retries] describeStacks({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:40:50.289] [INFO] core - [32m[39m
+[32m ✅  admin-notes-storage[39m
+[32m[39m
+[2022-02-25T19:40:50.290] [TRACE] core - After update deploy statuses: [{"name":"admin-notes-storage","status":"succeeded","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836011504,"endedAt":1645836050289,"events":[{"eventId":"a74d5350-969c-11ec-8363-0a0220dc9827","timestamp":"2022-02-26T00:40:10.749Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:16.309Z","timestamp":"2022-02-26T00:40:16.309Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"SSTMetadata"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:16.511Z","timestamp":"2022-02-26T00:40:16.511Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:17.454Z","timestamp":"2022-02-26T00:40:17.454Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:18.260Z","timestamp":"2022-02-26T00:40:18.260Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"SSTMetadata"},{"eventId":"SSTMetadata-CREATE_COMPLETE-2022-02-26T00:40:18.429Z","timestamp":"2022-02-26T00:40:18.429Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_COMPLETE","logicalResourceId":"SSTMetadata"},{"eventId":"NotesTable7100B0E8-CREATE_COMPLETE-2022-02-26T00:40:48.539Z","timestamp":"2022-02-26T00:40:48.539Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_COMPLETE","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"be8059f0-969c-11ec-9869-0a3f8d258fdd","timestamp":"2022-02-26T00:40:49.662Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"CREATE_COMPLETE","logicalResourceId":"admin-notes-storage"}],"eventsFirstEventAt":"2022-02-26T00:40:05.749Z","outputs":{},"exports":{}}]
+[2022-02-25T19:40:50.290] [TRACE] core - After deploy stacks: [{"name":"admin-notes-storage","status":"succeeded","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836011504,"endedAt":1645836050289,"events":[{"eventId":"a74d5350-969c-11ec-8363-0a0220dc9827","timestamp":"2022-02-26T00:40:10.749Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:16.309Z","timestamp":"2022-02-26T00:40:16.309Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"SSTMetadata"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:16.511Z","timestamp":"2022-02-26T00:40:16.511Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"NotesTable7100B0E8-CREATE_IN_PROGRESS-2022-02-26T00:40:17.454Z","timestamp":"2022-02-26T00:40:17.454Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"SSTMetadata-CREATE_IN_PROGRESS-2022-02-26T00:40:18.260Z","timestamp":"2022-02-26T00:40:18.260Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"SSTMetadata"},{"eventId":"SSTMetadata-CREATE_COMPLETE-2022-02-26T00:40:18.429Z","timestamp":"2022-02-26T00:40:18.429Z","resourceType":"AWS::CDK::Metadata","resourceStatus":"CREATE_COMPLETE","logicalResourceId":"SSTMetadata"},{"eventId":"NotesTable7100B0E8-CREATE_COMPLETE-2022-02-26T00:40:48.539Z","timestamp":"2022-02-26T00:40:48.539Z","resourceType":"AWS::DynamoDB::Table","resourceStatus":"CREATE_COMPLETE","logicalResourceId":"NotesTable7100B0E8"},{"eventId":"be8059f0-969c-11ec-9869-0a3f8d258fdd","timestamp":"2022-02-26T00:40:49.662Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"CREATE_COMPLETE","logicalResourceId":"admin-notes-storage"}],"eventsFirstEventAt":"2022-02-26T00:40:05.749Z","outputs":{},"exports":{}}]
+[2022-02-25T19:40:50.292] [INFO] default - 
+Stack admin-notes-storage
+[2022-02-25T19:40:50.292] [INFO] default -   Status: deployed
+[2022-02-25T19:40:50.293] [INFO] default - 
+[2022-02-25T19:40:50.294] [INFO] default - 
+[2022-02-25T19:40:50.295] [INFO] default - ==========================
+[2022-02-25T19:40:50.295] [INFO] default -  Starting Live Lambda Dev
+[2022-02-25T19:40:50.295] [INFO] default - ==========================
+[2022-02-25T19:40:50.295] [INFO] default - 
+[2022-02-25T19:40:50.296] [DEBUG] constructs-state - Fetching resources
+[2022-02-25T19:40:50.301] [INFO] lambda-watcher-state - [90mTranspiling Lambda code...[39m
+[2022-02-25T19:40:50.304] [DEBUG] default - Checking port 12557 on host 0.0.0.0
+[2022-02-25T19:40:50.310] [DEBUG] client - Starting runtime server on port: 12557
+[2022-02-25T19:40:50.311] [DEBUG] websocket - startWebSocketClient wss://kic4fzf5v0.execute-api.us-east-1.amazonaws.com/admin admin-notes-debug-stack-bucket83908e77-4on2f8oujx6g
+[2022-02-25T19:40:50.317] [DEBUG] watcher - Watcher ready for 2 files...
+[2022-02-25T19:40:50.571] [DEBUG] constructs-state - [AWS cloudformation 200 0.273s 0 retries] listStackResources({ StackName: 'admin-notes-storage', NextToken: undefined })
+[2022-02-25T19:40:50.899] [DEBUG] websocket - WebSocket connection opened
+[2022-02-25T19:40:50.900] [DEBUG] websocket - startKeepAliveMonitor
+[2022-02-25T19:40:51.982] [DEBUG] client - onClientMessage {"action":"server.clientRegistered","clientConnectionId":"OH-K7fQnIAMCLRQ="}
+[2022-02-25T19:40:51.982] [INFO] client - Debug session started. Listening for requests...
+[2022-02-25T19:40:51.983] [DEBUG] client - Client connection id: OH-K7fQnIAMCLRQ=
+[2022-02-25T19:41:50.903] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T19:42:50.900] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T19:43:50.901] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T19:44:43.701] [INFO] cdk-watcher-state - [90mRebuilding infrastructure...[39m
+[2022-02-25T19:44:43.702] [TRACE] cdk-watcher-state - {"inputFiles":["/Users/yifan.guo/SSTProjects/notes/stacks/StorageStack.js","/Users/yifan.guo/SSTProjects/notes/stacks/index.js"],"needsReBuild":true,"buildPromise":null,"buildErrors":null,"needsReCheck":false,"lintProcess":null,"lintHasError":null,"lintOutput":null,"typeCheckProcess":null,"typeCheckErrorOutput":null,"synthPromise":null,"synthError":null,"synthedChecksumData":null,"lastDeployingChecksumData":{"admin-notes-storage":"6fa6dd18c0311a2751a4392c7444fa0d9f6548de"},"needsReDeploy":false,"userWillReDeploy":false,"deployPromise":null,"deployError":null,"deployedManifest":null}
+[2022-02-25T19:44:43.704] [DEBUG] lambda-watcher-state - handleFileChange: /Users/yifan.guo/SSTProjects/notes/stacks/StorageStack.js
+[2022-02-25T19:44:43.705] [DEBUG] lambda-watcher-state - onFileChanged: File is not linked to the entry points
+[2022-02-25T19:44:43.712] [DEBUG] cdk-watcher-state - handleReBuildSucceeded
+[2022-02-25T19:44:43.712] [TRACE] cdk-watcher-state - {"inputFiles":["/Users/yifan.guo/SSTProjects/notes/stacks/StorageStack.js","/Users/yifan.guo/SSTProjects/notes/stacks/index.js"],"needsReBuild":false,"buildPromise":null,"buildErrors":null,"needsReCheck":true,"lintProcess":null,"lintHasError":null,"lintOutput":null,"typeCheckProcess":null,"typeCheckErrorOutput":null,"synthPromise":null,"synthError":null,"synthedChecksumData":null,"lastDeployingChecksumData":{"admin-notes-storage":"6fa6dd18c0311a2751a4392c7444fa0d9f6548de"},"needsReDeploy":false,"userWillReDeploy":false,"deployPromise":null,"deployError":null,"deployedManifest":null}
+[2022-02-25T19:44:43.723] [DEBUG] core - synth {
+  output: '.build/cdk.out',
+  app: 'node .build/run.js',
+  rollback: false,
+  roleArn: undefined,
+  verbose: 0,
+  noColor: false
+}
+[2022-02-25T19:44:43.811] [TRACE] cdk - [43m[30m!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!![39m[49m
+
+[2022-02-25T19:44:43.811] [TRACE] cdk - [43m[30m!!                                                                                  !![39m[49m
+[43m[30m!!  This software has not been tested with node v17.1.0.                            !![39m[49m
+[43m[30m!!  You may to encounter runtime issues, and should switch to a supported release.  !![39m[49m
+[43m[30m!!                                                                                  !![39m[49m
+[43m[30m!!  As of the current release, supported versions of node are:                      !![39m[49m
+[43m[30m!!  - ^12.7.0                                                                       !![39m[49m
+[43m[30m!!  - ^14.5.0                                                                       !![39m[49m
+[43m[30m!!  - ^16.3.0                                                                       !![39m[49m
+[43m[30m!!                                                                                  !![39m[49m
+[43m[30m!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!![39m[49m
+
+[2022-02-25T19:44:44.169] [DEBUG] cdk-watcher-state - handleLintDone: linter exited with code 0
+[2022-02-25T19:44:44.497] [DEBUG] cdk-watcher-state - handleSynthDone: synth exited with error null
+[2022-02-25T19:44:44.497] [INFO] cdk-watcher-state - [36mPress ENTER to redeploy infrastructure[39m
+[2022-02-25T19:44:44.497] [TRACE] cdk-watcher-state - {"inputFiles":["/Users/yifan.guo/SSTProjects/notes/stacks/StorageStack.js","/Users/yifan.guo/SSTProjects/notes/stacks/index.js"],"needsReBuild":false,"buildPromise":null,"buildErrors":null,"needsReCheck":false,"lintProcess":null,"lintHasError":null,"lintOutput":"","typeCheckProcess":null,"typeCheckErrorOutput":null,"synthPromise":null,"synthError":null,"synthedChecksumData":{"admin-notes-storage":"5d94a0cc65400e5893b1b7781abcfb823607e772"},"lastDeployingChecksumData":{"admin-notes-storage":"6fa6dd18c0311a2751a4392c7444fa0d9f6548de"},"needsReDeploy":true,"userWillReDeploy":false,"deployPromise":null,"deployError":null,"deployedManifest":null}
+[2022-02-25T19:44:50.898] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T19:44:52.466] [TRACE] cdk-watcher-state - {"inputFiles":["/Users/yifan.guo/SSTProjects/notes/stacks/StorageStack.js","/Users/yifan.guo/SSTProjects/notes/stacks/index.js"],"needsReBuild":false,"buildPromise":null,"buildErrors":null,"needsReCheck":false,"lintProcess":null,"lintHasError":null,"lintOutput":"","typeCheckProcess":null,"typeCheckErrorOutput":null,"synthPromise":null,"synthError":null,"synthedChecksumData":{"admin-notes-storage":"5d94a0cc65400e5893b1b7781abcfb823607e772"},"lastDeployingChecksumData":{"admin-notes-storage":"6fa6dd18c0311a2751a4392c7444fa0d9f6548de"},"needsReDeploy":true,"userWillReDeploy":true,"deployPromise":null,"deployError":null,"deployedManifest":null}
+[2022-02-25T19:44:52.469] [INFO] default - [90mDeploying stacks[39m
+[2022-02-25T19:44:52.470] [TRACE] core - Initial stack states: [{"name":"admin-notes-storage","status":"pending","dependencies":[],"region":"us-east-1","events":[]}]
+[2022-02-25T19:44:52.470] [TRACE] core - After update deploy statuses: [{"name":"admin-notes-storage","status":"pending","dependencies":[],"region":"us-east-1","events":[]}]
+[2022-02-25T19:44:52.471] [DEBUG] core - deploy stack: started admin-notes-storage
+[2022-02-25T19:44:52.471] [DEBUG] core - deploy stack: get pre-deploy status
+[2022-02-25T19:44:52.781] [DEBUG] constructs-state - [AWS cloudformation 200 0.309s 0 retries] describeStacks({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:44:52.782] [DEBUG] core - deploy stack: get pre-deploy status: {
+  StackStatus: 'CREATE_COMPLETE',
+  LastUpdatedTime: 2022-02-26T00:40:10.749Z
+}
+[2022-02-25T19:44:52.783] [DEBUG] core - deploy stack: check template changed
+[2022-02-25T19:44:53.029] [DEBUG] constructs-state - [AWS cloudformation 200 0.244s 0 retries] getTemplate({ StackName: 'admin-notes-storage', TemplateStage: 'Original' })
+[2022-02-25T19:44:53.034] [DEBUG] core - Resources:
+  SSTMetadata:
+    Type: AWS::CDK::Metadata
+    Metadata:
+      aws:cdk:path: admin-notes-storage/SSTMetadata
+  NotesTable7100B0E8:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+        - AttributeName: noteId
+          KeyType: RANGE
+      AttributeDefinitions:
+        - AttributeName: userId
+          AttributeType: S
+        - AttributeName: noteId
+          AttributeType: S
+      BillingMode: PAY_PER_REQUEST
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      TableName: admin-notes-Notes
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: admin-notes-storage/Notes/Table/Resource
+
+[2022-02-25T19:44:53.034] [DEBUG] core - Resources:
+  SSTMetadata:
+    Type: AWS::CDK::Metadata
+    Metadata:
+      aws:cdk:path: admin-notes-storage/SSTMetadata
+  UploadsBucketC4B27CC7:
+    Type: AWS::S3::Bucket
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: admin-notes-storage/Uploads/Bucket/Resource
+  NotesTable7100B0E8:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+        - AttributeName: noteId
+          KeyType: RANGE
+      AttributeDefinitions:
+        - AttributeName: userId
+          AttributeType: S
+        - AttributeName: noteId
+          AttributeType: S
+      BillingMode: PAY_PER_REQUEST
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      TableName: admin-notes-Notes
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: admin-notes-storage/Notes/Table/Resource
+
+[2022-02-25T19:44:53.035] [DEBUG] core - deploy stack: run cdk deploy
+[2022-02-25T19:44:53.042] [DEBUG] core - deploy stack: poll stack status
+[2022-02-25T19:44:53.127] [TRACE] core - deploy stack: run cdk deploy: stderr: [43m[30m!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!![39m[49m
+
+[2022-02-25T19:44:53.127] [TRACE] core - deploy stack: run cdk deploy: stderr: [43m[30m!!                                                                                  !![39m[49m
+[43m[30m!!  This software has not been tested with node v17.1.0.                            !![39m[49m
+[43m[30m!!  You may to encounter runtime issues, and should switch to a supported release.  !![39m[49m
+[43m[30m!!                                                                                  !![39m[49m
+[43m[30m!!  As of the current release, supported versions of node are:                      !![39m[49m
+[43m[30m!!  - ^12.7.0                                                                       !![39m[49m
+[43m[30m!!  - ^14.5.0                                                                       !![39m[49m
+[43m[30m!!  - ^16.3.0                                                                       !![39m[49m
+
+[2022-02-25T19:44:53.128] [TRACE] core - deploy stack: run cdk deploy: stderr: [43m[30m!!                                                                                  !![39m[49m
+[43m[30m!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!![39m[49m
+
+[2022-02-25T19:44:53.297] [DEBUG] constructs-state - [AWS cloudformation 200 0.254s 0 retries] describeStacks({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:44:53.297] [DEBUG] core - deploy stack: poll stack status: {
+  StackStatus: 'CREATE_COMPLETE',
+  LastUpdatedTime: 2022-02-26T00:40:10.749Z
+}
+[2022-02-25T19:44:53.297] [DEBUG] core - deploy stack: poll stack status: unknown
+[2022-02-25T19:44:53.332] [TRACE] core - deploy stack: run cdk deploy: stderr: admin-notes-storage: deploying...
+
+[2022-02-25T19:44:54.434] [TRACE] core - deploy stack: run cdk deploy: stderr: admin-notes-storage: creating CloudFormation changeset...
+
+[2022-02-25T19:44:56.576] [DEBUG] constructs-state - [AWS cloudformation 200 0.277s 0 retries] describeStacks({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:44:56.577] [DEBUG] core - deploy stack: poll stack status: {
+  StackStatus: 'CREATE_COMPLETE',
+  LastUpdatedTime: 2022-02-26T00:40:10.749Z
+}
+[2022-02-25T19:44:56.578] [DEBUG] core - deploy stack: poll stack status: unknown
+[2022-02-25T19:44:59.855] [DEBUG] constructs-state - [AWS cloudformation 200 0.273s 0 retries] describeStacks({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:44:59.857] [DEBUG] core - deploy stack: poll stack status: {
+  StackStatus: 'CREATE_COMPLETE',
+  LastUpdatedTime: 2022-02-26T00:40:10.749Z
+}
+[2022-02-25T19:44:59.857] [DEBUG] core - deploy stack: poll stack status: unknown
+[2022-02-25T19:45:03.221] [DEBUG] constructs-state - [AWS cloudformation 200 0.357s 0 retries] describeStacks({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:45:03.222] [DEBUG] core - deploy stack: poll stack status: {
+  StackStatus: 'UPDATE_IN_PROGRESS',
+  LastUpdatedTime: 2022-02-26T00:45:00.762Z
+}
+[2022-02-25T19:45:03.223] [DEBUG] core - deploy stack: poll stack status: cf update started
+[2022-02-25T19:45:03.223] [DEBUG] core - deploy stack: done admin-notes-storage {
+  status: 'deploying',
+  statusReason: undefined,
+  account: '337099998523',
+  outputs: {},
+  exports: {}
+}
+[2022-02-25T19:45:03.224] [TRACE] core - After deploy stacks: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836303224,"events":[],"outputs":{},"exports":{}}]
+[2022-02-25T19:45:03.224] [INFO] default - Checking deploy status...
+[2022-02-25T19:45:03.235] [DEBUG] core - deploy stack: run cdk deploy: exited with code null
+[2022-02-25T19:45:08.230] [TRACE] core - Initial stack states: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836303224,"events":[],"outputs":{},"exports":{}}]
+[2022-02-25T19:45:08.231] [DEBUG] core - Fetching stack events admin-notes-storage
+[2022-02-25T19:45:08.488] [DEBUG] constructs-state - [AWS cloudformation 200 0.255s 0 retries] describeStackEvents({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:45:08.490] [INFO] core - admin-notes-storage | [0mUPDATE_IN_PROGRESS[0m | AWS::CloudFormation::Stack | [0m[1madmin-notes-storage[22m[0m 
+[2022-02-25T19:45:08.490] [DEBUG] core - Checking stack status admin-notes-storage
+[2022-02-25T19:45:08.774] [DEBUG] constructs-state - [AWS cloudformation 200 0.283s 0 retries] describeStacks({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:45:08.775] [TRACE] core - After update deploy statuses: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836303224,"events":[{"eventId":"542956f0-969d-11ec-ad1f-0ea9cb45072b","timestamp":"2022-02-26T00:45:00.762Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"UPDATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"}],"eventsFirstEventAt":"2022-02-26T00:44:55.762Z","outputs":{},"exports":{}}]
+[2022-02-25T19:45:08.776] [TRACE] core - After deploy stacks: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836303224,"events":[{"eventId":"542956f0-969d-11ec-ad1f-0ea9cb45072b","timestamp":"2022-02-26T00:45:00.762Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"UPDATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"}],"eventsFirstEventAt":"2022-02-26T00:44:55.762Z","outputs":{},"exports":{}}]
+[2022-02-25T19:45:13.781] [TRACE] core - Initial stack states: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836303224,"events":[{"eventId":"542956f0-969d-11ec-ad1f-0ea9cb45072b","timestamp":"2022-02-26T00:45:00.762Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"UPDATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"}],"eventsFirstEventAt":"2022-02-26T00:44:55.762Z","outputs":{},"exports":{}}]
+[2022-02-25T19:45:13.782] [DEBUG] core - Fetching stack events admin-notes-storage
+[2022-02-25T19:45:14.035] [DEBUG] constructs-state - [AWS cloudformation 200 0.252s 0 retries] describeStackEvents({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:45:14.035] [INFO] core - admin-notes-storage | [0mCREATE_IN_PROGRESS[0m | AWS::S3::Bucket | [0m[1mUploadsBucketC4B27CC7[22m[0m 
+[2022-02-25T19:45:14.036] [INFO] core - admin-notes-storage | [0mCREATE_IN_PROGRESS[0m | AWS::S3::Bucket | [0m[1mUploadsBucketC4B27CC7[22m[0m 
+[2022-02-25T19:45:14.036] [DEBUG] core - Checking stack status admin-notes-storage
+[2022-02-25T19:45:14.298] [DEBUG] constructs-state - [AWS cloudformation 200 0.261s 0 retries] describeStacks({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:45:14.299] [TRACE] core - After update deploy statuses: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836303224,"events":[{"eventId":"542956f0-969d-11ec-ad1f-0ea9cb45072b","timestamp":"2022-02-26T00:45:00.762Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"UPDATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:08.977Z","timestamp":"2022-02-26T00:45:08.977Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"UploadsBucketC4B27CC7"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:09.759Z","timestamp":"2022-02-26T00:45:09.759Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"UploadsBucketC4B27CC7"}],"eventsFirstEventAt":"2022-02-26T00:44:55.762Z","outputs":{},"exports":{}}]
+[2022-02-25T19:45:14.299] [TRACE] core - After deploy stacks: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836303224,"events":[{"eventId":"542956f0-969d-11ec-ad1f-0ea9cb45072b","timestamp":"2022-02-26T00:45:00.762Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"UPDATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:08.977Z","timestamp":"2022-02-26T00:45:08.977Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"UploadsBucketC4B27CC7"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:09.759Z","timestamp":"2022-02-26T00:45:09.759Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"UploadsBucketC4B27CC7"}],"eventsFirstEventAt":"2022-02-26T00:44:55.762Z","outputs":{},"exports":{}}]
+[2022-02-25T19:45:19.301] [TRACE] core - Initial stack states: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836303224,"events":[{"eventId":"542956f0-969d-11ec-ad1f-0ea9cb45072b","timestamp":"2022-02-26T00:45:00.762Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"UPDATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:08.977Z","timestamp":"2022-02-26T00:45:08.977Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"UploadsBucketC4B27CC7"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:09.759Z","timestamp":"2022-02-26T00:45:09.759Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"UploadsBucketC4B27CC7"}],"eventsFirstEventAt":"2022-02-26T00:44:55.762Z","outputs":{},"exports":{}}]
+[2022-02-25T19:45:19.302] [DEBUG] core - Fetching stack events admin-notes-storage
+[2022-02-25T19:45:19.559] [DEBUG] constructs-state - [AWS cloudformation 200 0.255s 0 retries] describeStackEvents({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:45:19.560] [DEBUG] core - Checking stack status admin-notes-storage
+[2022-02-25T19:45:19.841] [DEBUG] constructs-state - [AWS cloudformation 200 0.276s 0 retries] describeStacks({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:45:19.843] [TRACE] core - After update deploy statuses: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836303224,"events":[{"eventId":"542956f0-969d-11ec-ad1f-0ea9cb45072b","timestamp":"2022-02-26T00:45:00.762Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"UPDATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:08.977Z","timestamp":"2022-02-26T00:45:08.977Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"UploadsBucketC4B27CC7"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:09.759Z","timestamp":"2022-02-26T00:45:09.759Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"UploadsBucketC4B27CC7"}],"eventsFirstEventAt":"2022-02-26T00:44:55.762Z","outputs":{},"exports":{}}]
+[2022-02-25T19:45:19.843] [TRACE] core - After deploy stacks: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836303224,"events":[{"eventId":"542956f0-969d-11ec-ad1f-0ea9cb45072b","timestamp":"2022-02-26T00:45:00.762Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"UPDATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:08.977Z","timestamp":"2022-02-26T00:45:08.977Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"UploadsBucketC4B27CC7"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:09.759Z","timestamp":"2022-02-26T00:45:09.759Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"UploadsBucketC4B27CC7"}],"eventsFirstEventAt":"2022-02-26T00:44:55.762Z","outputs":{},"exports":{}}]
+[2022-02-25T19:45:19.843] [INFO] default - Checking deploy status...
+[2022-02-25T19:45:24.848] [TRACE] core - Initial stack states: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836303224,"events":[{"eventId":"542956f0-969d-11ec-ad1f-0ea9cb45072b","timestamp":"2022-02-26T00:45:00.762Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"UPDATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:08.977Z","timestamp":"2022-02-26T00:45:08.977Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"UploadsBucketC4B27CC7"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:09.759Z","timestamp":"2022-02-26T00:45:09.759Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"UploadsBucketC4B27CC7"}],"eventsFirstEventAt":"2022-02-26T00:44:55.762Z","outputs":{},"exports":{}}]
+[2022-02-25T19:45:24.849] [DEBUG] core - Fetching stack events admin-notes-storage
+[2022-02-25T19:45:25.092] [DEBUG] constructs-state - [AWS cloudformation 200 0.242s 0 retries] describeStackEvents({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:45:25.094] [DEBUG] core - Checking stack status admin-notes-storage
+[2022-02-25T19:45:25.389] [DEBUG] constructs-state - [AWS cloudformation 200 0.295s 0 retries] describeStacks({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:45:25.391] [TRACE] core - After update deploy statuses: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836303224,"events":[{"eventId":"542956f0-969d-11ec-ad1f-0ea9cb45072b","timestamp":"2022-02-26T00:45:00.762Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"UPDATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:08.977Z","timestamp":"2022-02-26T00:45:08.977Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"UploadsBucketC4B27CC7"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:09.759Z","timestamp":"2022-02-26T00:45:09.759Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"UploadsBucketC4B27CC7"}],"eventsFirstEventAt":"2022-02-26T00:44:55.762Z","outputs":{},"exports":{}}]
+[2022-02-25T19:45:25.392] [TRACE] core - After deploy stacks: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836303224,"events":[{"eventId":"542956f0-969d-11ec-ad1f-0ea9cb45072b","timestamp":"2022-02-26T00:45:00.762Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"UPDATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:08.977Z","timestamp":"2022-02-26T00:45:08.977Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"UploadsBucketC4B27CC7"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:09.759Z","timestamp":"2022-02-26T00:45:09.759Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"UploadsBucketC4B27CC7"}],"eventsFirstEventAt":"2022-02-26T00:44:55.762Z","outputs":{},"exports":{}}]
+[2022-02-25T19:45:25.392] [INFO] default - Checking deploy status...
+[2022-02-25T19:45:30.397] [TRACE] core - Initial stack states: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836303224,"events":[{"eventId":"542956f0-969d-11ec-ad1f-0ea9cb45072b","timestamp":"2022-02-26T00:45:00.762Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"UPDATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:08.977Z","timestamp":"2022-02-26T00:45:08.977Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"UploadsBucketC4B27CC7"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:09.759Z","timestamp":"2022-02-26T00:45:09.759Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"UploadsBucketC4B27CC7"}],"eventsFirstEventAt":"2022-02-26T00:44:55.762Z","outputs":{},"exports":{}}]
+[2022-02-25T19:45:30.398] [DEBUG] core - Fetching stack events admin-notes-storage
+[2022-02-25T19:45:30.637] [DEBUG] constructs-state - [AWS cloudformation 200 0.238s 0 retries] describeStackEvents({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:45:30.638] [DEBUG] core - Checking stack status admin-notes-storage
+[2022-02-25T19:45:30.900] [DEBUG] constructs-state - [AWS cloudformation 200 0.261s 0 retries] describeStacks({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:45:30.901] [TRACE] core - After update deploy statuses: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836303224,"events":[{"eventId":"542956f0-969d-11ec-ad1f-0ea9cb45072b","timestamp":"2022-02-26T00:45:00.762Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"UPDATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:08.977Z","timestamp":"2022-02-26T00:45:08.977Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"UploadsBucketC4B27CC7"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:09.759Z","timestamp":"2022-02-26T00:45:09.759Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"UploadsBucketC4B27CC7"}],"eventsFirstEventAt":"2022-02-26T00:44:55.762Z","outputs":{},"exports":{}}]
+[2022-02-25T19:45:30.901] [TRACE] core - After deploy stacks: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836303224,"events":[{"eventId":"542956f0-969d-11ec-ad1f-0ea9cb45072b","timestamp":"2022-02-26T00:45:00.762Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"UPDATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:08.977Z","timestamp":"2022-02-26T00:45:08.977Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"UploadsBucketC4B27CC7"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:09.759Z","timestamp":"2022-02-26T00:45:09.759Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"UploadsBucketC4B27CC7"}],"eventsFirstEventAt":"2022-02-26T00:44:55.762Z","outputs":{},"exports":{}}]
+[2022-02-25T19:45:30.902] [INFO] default - Checking deploy status...
+[2022-02-25T19:45:35.907] [TRACE] core - Initial stack states: [{"name":"admin-notes-storage","status":"deploying","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836303224,"events":[{"eventId":"542956f0-969d-11ec-ad1f-0ea9cb45072b","timestamp":"2022-02-26T00:45:00.762Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"UPDATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:08.977Z","timestamp":"2022-02-26T00:45:08.977Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"UploadsBucketC4B27CC7"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:09.759Z","timestamp":"2022-02-26T00:45:09.759Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"UploadsBucketC4B27CC7"}],"eventsFirstEventAt":"2022-02-26T00:44:55.762Z","outputs":{},"exports":{}}]
+[2022-02-25T19:45:35.908] [DEBUG] core - Fetching stack events admin-notes-storage
+[2022-02-25T19:45:36.167] [DEBUG] constructs-state - [AWS cloudformation 200 0.258s 0 retries] describeStackEvents({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:45:36.168] [INFO] core - admin-notes-storage | [32mCREATE_COMPLETE[39m | AWS::S3::Bucket | [32m[1mUploadsBucketC4B27CC7[22m[39m 
+[2022-02-25T19:45:36.169] [INFO] core - admin-notes-storage | [32mUPDATE_COMPLETE_CLEANUP_IN_PROGRESS[39m | AWS::CloudFormation::Stack | [32m[1madmin-notes-storage[22m[39m 
+[2022-02-25T19:45:36.169] [INFO] core - admin-notes-storage | [32mUPDATE_COMPLETE[39m | AWS::CloudFormation::Stack | [32m[1madmin-notes-storage[22m[39m 
+[2022-02-25T19:45:36.169] [DEBUG] core - Checking stack status admin-notes-storage
+[2022-02-25T19:45:36.409] [DEBUG] constructs-state - [AWS cloudformation 200 0.238s 0 retries] describeStacks({ StackName: 'admin-notes-storage' })
+[2022-02-25T19:45:36.410] [INFO] core - [32m[39m
+[32m ✅  admin-notes-storage[39m
+[32m[39m
+[2022-02-25T19:45:36.411] [TRACE] core - After update deploy statuses: [{"name":"admin-notes-storage","status":"succeeded","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836303224,"endedAt":1645836336410,"events":[{"eventId":"542956f0-969d-11ec-ad1f-0ea9cb45072b","timestamp":"2022-02-26T00:45:00.762Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"UPDATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:08.977Z","timestamp":"2022-02-26T00:45:08.977Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"UploadsBucketC4B27CC7"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:09.759Z","timestamp":"2022-02-26T00:45:09.759Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"UploadsBucketC4B27CC7"},{"eventId":"UploadsBucketC4B27CC7-CREATE_COMPLETE-2022-02-26T00:45:31.071Z","timestamp":"2022-02-26T00:45:31.071Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_COMPLETE","logicalResourceId":"UploadsBucketC4B27CC7"},{"eventId":"67684000-969d-11ec-9faf-12b373c524cd","timestamp":"2022-02-26T00:45:33.045Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"UPDATE_COMPLETE_CLEANUP_IN_PROGRESS","logicalResourceId":"admin-notes-storage"},{"eventId":"67f89920-969d-11ec-a3d8-0e72790b6507","timestamp":"2022-02-26T00:45:33.987Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"UPDATE_COMPLETE","logicalResourceId":"admin-notes-storage"}],"eventsFirstEventAt":"2022-02-26T00:44:55.762Z","outputs":{},"exports":{}}]
+[2022-02-25T19:45:36.411] [TRACE] core - After deploy stacks: [{"name":"admin-notes-storage","status":"succeeded","dependencies":[],"account":"337099998523","region":"us-east-1","startedAt":1645836303224,"endedAt":1645836336410,"events":[{"eventId":"542956f0-969d-11ec-ad1f-0ea9cb45072b","timestamp":"2022-02-26T00:45:00.762Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"UPDATE_IN_PROGRESS","resourceStatusReason":"User Initiated","logicalResourceId":"admin-notes-storage"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:08.977Z","timestamp":"2022-02-26T00:45:08.977Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","logicalResourceId":"UploadsBucketC4B27CC7"},{"eventId":"UploadsBucketC4B27CC7-CREATE_IN_PROGRESS-2022-02-26T00:45:09.759Z","timestamp":"2022-02-26T00:45:09.759Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_IN_PROGRESS","resourceStatusReason":"Resource creation Initiated","logicalResourceId":"UploadsBucketC4B27CC7"},{"eventId":"UploadsBucketC4B27CC7-CREATE_COMPLETE-2022-02-26T00:45:31.071Z","timestamp":"2022-02-26T00:45:31.071Z","resourceType":"AWS::S3::Bucket","resourceStatus":"CREATE_COMPLETE","logicalResourceId":"UploadsBucketC4B27CC7"},{"eventId":"67684000-969d-11ec-9faf-12b373c524cd","timestamp":"2022-02-26T00:45:33.045Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"UPDATE_COMPLETE_CLEANUP_IN_PROGRESS","logicalResourceId":"admin-notes-storage"},{"eventId":"67f89920-969d-11ec-a3d8-0e72790b6507","timestamp":"2022-02-26T00:45:33.987Z","resourceType":"AWS::CloudFormation::Stack","resourceStatus":"UPDATE_COMPLETE","logicalResourceId":"admin-notes-storage"}],"eventsFirstEventAt":"2022-02-26T00:44:55.762Z","outputs":{},"exports":{}}]
+[2022-02-25T19:45:36.412] [INFO] default - 
+Stack admin-notes-storage
+[2022-02-25T19:45:36.412] [INFO] default -   Status: deployed
+[2022-02-25T19:45:36.412] [INFO] default - 
+[2022-02-25T19:45:36.413] [DEBUG] lambda-watcher-state - handleUpdateLambdaHandlers []
+[2022-02-25T19:45:36.414] [DEBUG] constructs-state - handleUpdateConstructs
+[2022-02-25T19:45:36.414] [DEBUG] constructs-state - Fetching resources
+[2022-02-25T19:45:36.421] [INFO] cdk-watcher-state - [90mDone deploying infrastructure[39m
+[2022-02-25T19:45:36.421] [TRACE] cdk-watcher-state - {"inputFiles":["/Users/yifan.guo/SSTProjects/notes/stacks/StorageStack.js","/Users/yifan.guo/SSTProjects/notes/stacks/index.js"],"needsReBuild":false,"buildPromise":null,"buildErrors":null,"needsReCheck":false,"lintProcess":null,"lintHasError":null,"lintOutput":"","typeCheckProcess":null,"typeCheckErrorOutput":null,"synthPromise":null,"synthError":null,"synthedChecksumData":{"admin-notes-storage":"5d94a0cc65400e5893b1b7781abcfb823607e772"},"lastDeployingChecksumData":{"admin-notes-storage":"5d94a0cc65400e5893b1b7781abcfb823607e772"},"needsReDeploy":false,"userWillReDeploy":false,"deployPromise":null,"deployError":null,"deployedManifest":null}
+[2022-02-25T19:45:36.648] [DEBUG] constructs-state - [AWS cloudformation 200 0.234s 0 retries] listStackResources({ StackName: 'admin-notes-storage', NextToken: undefined })
+[2022-02-25T19:45:50.899] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T19:46:50.902] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T19:47:50.903] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T19:48:50.901] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T19:49:50.904] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T19:50:50.905] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T19:51:50.904] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T19:52:50.905] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T19:53:50.906] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T19:54:50.906] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T19:55:50.920] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T19:56:50.930] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T19:57:50.933] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T19:58:50.935] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T19:59:50.937] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T20:00:50.940] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T20:01:50.942] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T20:02:50.944] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T20:03:50.942] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T20:04:50.944] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T20:05:50.947] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T20:06:50.949] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T20:07:50.952] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T20:08:50.954] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T20:09:50.955] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T20:10:50.953] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T20:11:50.955] [DEBUG] websocket - Sending keep-alive call
+[2022-02-25T20:12:50.958] [DEBUG] websocket - Sending keep-alive call

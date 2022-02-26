@@ -1,0 +1,101 @@
+{
+  "version": "14.0.0",
+  "artifacts": {
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    },
+    "admin-notes-storage": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://337099998523/us-east-1",
+      "properties": {
+        "templateFile": "admin-notes-storage.template.json",
+        "validateOnSynth": false
+      },
+      "metadata": {
+        "/admin-notes-storage/SSTMetadata": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SSTMetadata",
+            "trace": [
+              "StorageStack.addMetadataResource (/Users/yifan.guo/SSTProjects/notes/node_modules/@serverless-stack/resources/src/Stack.ts:96:5)",
+              "new Stack (/Users/yifan.guo/SSTProjects/notes/node_modules/@serverless-stack/resources/src/Stack.ts:34:10)",
+              "new StorageStack (/Users/yifan.guo/SSTProjects/notes/stacks/StorageStack.js:10:5)",
+              "Object.main (/Users/yifan.guo/SSTProjects/notes/stacks/index.js:4:3)",
+              "Object.<anonymous> (/Users/yifan.guo/SSTProjects/notes/.build/run.js:104:16)",
+              "Module._compile (node:internal/modules/cjs/loader:1097:14)",
+              "Object.Module._extensions..js (node:internal/modules/cjs/loader:1149:10)",
+              "Module.load (node:internal/modules/cjs/loader:975:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:822:12)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:81:12)",
+              "node:internal/main/run_main_module:17:47"
+            ]
+          }
+        ],
+        "/admin-notes-storage/Uploads/Bucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UploadsBucketC4B27CC7",
+            "trace": [
+              "new Bucket (/Users/yifan.guo/SSTProjects/notes/node_modules/@aws-cdk/aws-s3/lib/bucket.ts:758:22)",
+              "new Bucket (/Users/yifan.guo/SSTProjects/notes/node_modules/@serverless-stack/resources/src/Bucket.ts:76:23)",
+              "new StorageStack (/Users/yifan.guo/SSTProjects/notes/stacks/StorageStack.js:13:19)",
+              "Object.main (/Users/yifan.guo/SSTProjects/notes/stacks/index.js:4:3)",
+              "Object.<anonymous> (/Users/yifan.guo/SSTProjects/notes/.build/run.js:104:16)",
+              "Module._compile (node:internal/modules/cjs/loader:1097:14)",
+              "Object.Module._extensions..js (node:internal/modules/cjs/loader:1149:10)",
+              "Module.load (node:internal/modules/cjs/loader:975:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:822:12)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:81:12)",
+              "node:internal/main/run_main_module:17:47"
+            ]
+          }
+        ],
+        "/admin-notes-storage/Notes/Table": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "NotesTable7100B0E8"
+            },
+            "trace": [
+              "ConstructNode.addMetadata (/Users/yifan.guo/SSTProjects/notes/node_modules/@aws-cdk/core/lib/construct-compat.ts:252:92)",
+              "new Table (/Users/yifan.guo/SSTProjects/notes/node_modules/@aws-cdk/aws-dynamodb/lib/table.ts:710:38)",
+              "new Table (/Users/yifan.guo/SSTProjects/notes/node_modules/@serverless-stack/resources/src/Table.ts:172:28)",
+              "new StorageStack (/Users/yifan.guo/SSTProjects/notes/stacks/StorageStack.js:16:18)",
+              "Object.main (/Users/yifan.guo/SSTProjects/notes/stacks/index.js:4:3)",
+              "Object.<anonymous> (/Users/yifan.guo/SSTProjects/notes/.build/run.js:104:16)",
+              "Module._compile (node:internal/modules/cjs/loader:1097:14)",
+              "Object.Module._extensions..js (node:internal/modules/cjs/loader:1149:10)",
+              "Module.load (node:internal/modules/cjs/loader:975:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:822:12)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:81:12)",
+              "node:internal/main/run_main_module:17:47"
+            ]
+          }
+        ],
+        "/admin-notes-storage/Notes/Table/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NotesTable7100B0E8",
+            "trace": [
+              "new Table (/Users/yifan.guo/SSTProjects/notes/node_modules/@aws-cdk/aws-dynamodb/lib/table.ts:681:18)",
+              "new Table (/Users/yifan.guo/SSTProjects/notes/node_modules/@serverless-stack/resources/src/Table.ts:172:28)",
+              "new StorageStack (/Users/yifan.guo/SSTProjects/notes/stacks/StorageStack.js:16:18)",
+              "Object.main (/Users/yifan.guo/SSTProjects/notes/stacks/index.js:4:3)",
+              "Object.<anonymous> (/Users/yifan.guo/SSTProjects/notes/.build/run.js:104:16)",
+              "Module._compile (node:internal/modules/cjs/loader:1097:14)",
+              "Object.Module._extensions..js (node:internal/modules/cjs/loader:1149:10)",
+              "Module.load (node:internal/modules/cjs/loader:975:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:822:12)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:81:12)",
+              "node:internal/main/run_main_module:17:47"
+            ]
+          }
+        ]
+      },
+      "displayName": "admin-notes-storage"
+    }
+  }
+}

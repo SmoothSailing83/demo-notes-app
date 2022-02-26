@@ -1,0 +1,1 @@
+[{"type":"Bucket","stack":"admin-notes-storage","name":"Uploads","props":{"bucketLogicalId":"UploadsBucketC4B27CC7"}},{"type":"Table","stack":"admin-notes-storage","name":"Notes","props":{"tableLogicalId":"NotesTable7100B0E8"}}]

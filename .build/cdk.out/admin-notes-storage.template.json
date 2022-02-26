@@ -1,0 +1,53 @@
+{
+  "Resources": {
+    "SSTMetadata": {
+      "Type": "AWS::CDK::Metadata",
+      "Metadata": {
+        "aws:cdk:path": "admin-notes-storage/SSTMetadata"
+      }
+    },
+    "UploadsBucketC4B27CC7": {
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "admin-notes-storage/Uploads/Bucket/Resource"
+      }
+    },
+    "NotesTable7100B0E8": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "KeySchema": [
+          {
+            "AttributeName": "userId",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "noteId",
+            "KeyType": "RANGE"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "userId",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "noteId",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "PointInTimeRecoverySpecification": {
+          "PointInTimeRecoveryEnabled": true
+        },
+        "TableName": "admin-notes-Notes"
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "admin-notes-storage/Notes/Table/Resource"
+      }
+    }
+  }
+}

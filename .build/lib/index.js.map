@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../stacks/index.js", "../../stacks/StorageStack.js"],
+  "sourcesContent": ["import StorageStack from \"./StorageStack\";\n\nexport default function main(app) {\n  new StorageStack(app, \"storage\");\n}", "import * as sst from \"@serverless-stack/resources\";\n\nexport default class StorageStack extends sst.Stack {\n  // Public reference to the bucket\n  bucket;\n  // Public reference to the table\n  table;\n\n  constructor(scope, id, props) {\n    super(scope, id, props);\n\n    // Create an S3 bucket\n    this.bucket = new sst.Bucket(this, \"Uploads\");\n\n    // Create the DynamoDB table\n    this.table = new sst.Table(this, \"Notes\", {\n      fields: {\n        userId: sst.TableFieldType.STRING,\n        noteId: sst.TableFieldType.STRING,\n      },\n      primaryIndex: { partitionKey: \"userId\", sortKey: \"noteId\" },\n    });\n  }\n}"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;;;ACAA,UAAqB;AAErB,iCAA8C,UAAM;AAAA,EAElD;AAAA,EAEA;AAAA,EAEA,YAAY,OAAO,IAAI,OAAO;AAC5B,UAAM,OAAO,IAAI;AAGjB,SAAK,SAAS,IAAQ,WAAO,MAAM;AAGnC,SAAK,QAAQ,IAAQ,UAAM,MAAM,SAAS;AAAA,MACxC,QAAQ;AAAA,QACN,QAAQ,AAAI,mBAAe;AAAA,QAC3B,QAAQ,AAAI,mBAAe;AAAA;AAAA,MAE7B,cAAc,EAAE,cAAc,UAAU,SAAS;AAAA;AAAA;AAAA;;;ADlBxC,cAAc,KAAK;AAChC,MAAI,aAAa,KAAK;AAAA;",
+  "names": []
+}
