@@ -5,30 +5,36 @@ var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __markAsModule = (target) => __defProp(target, "__esModule", { value: true });
+var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 var __export = (target, all) => {
-  __markAsModule(target);
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
 };
-var __reExport = (target, module2, desc) => {
+var __reExport = (target, module2, copyDefault, desc) => {
   if (module2 && typeof module2 === "object" || typeof module2 === "function") {
     for (let key of __getOwnPropNames(module2))
-      if (!__hasOwnProp.call(target, key) && key !== "default")
+      if (!__hasOwnProp.call(target, key) && (copyDefault || key !== "default"))
         __defProp(target, key, { get: () => module2[key], enumerable: !(desc = __getOwnPropDesc(module2, key)) || desc.enumerable });
   }
   return target;
 };
-var __toModule = (module2) => {
-  return __reExport(__markAsModule(__defProp(module2 != null ? __create(__getProtoOf(module2)) : {}, "default", module2 && module2.__esModule && "default" in module2 ? { get: () => module2.default, enumerable: true } : { value: module2, enumerable: true })), module2);
+var __toESM = (module2, isNodeMode) => {
+  return __reExport(__markAsModule(__defProp(module2 != null ? __create(__getProtoOf(module2)) : {}, "default", !isNodeMode && module2 && module2.__esModule ? { get: () => module2.default, enumerable: true } : { value: module2, enumerable: true })), module2);
 };
+var __toCommonJS = /* @__PURE__ */ ((cache) => {
+  return (module2, temp) => {
+    return cache && cache.get(module2) || (temp = __reExport(__markAsModule({}), module2, 1), cache && cache.set(module2, temp), temp);
+  };
+})(typeof WeakMap !== "undefined" ? /* @__PURE__ */ new WeakMap() : 0);
 
 // stacks/index.js
-__export(exports, {
+var stacks_exports = {};
+__export(stacks_exports, {
   default: () => main
 });
 
 // stacks/ApiStack.js
-var sst = __toModule(require("@serverless-stack/resources"));
+var sst = __toESM(require("@serverless-stack/resources"));
 var ApiStack = class extends sst.Stack {
   api;
   constructor(scope, id, props) {
@@ -55,9 +61,10 @@ var ApiStack = class extends sst.Stack {
     });
   }
 };
+__name(ApiStack, "ApiStack");
 
 // stacks/StorageStack.js
-var sst2 = __toModule(require("@serverless-stack/resources"));
+var sst2 = __toESM(require("@serverless-stack/resources"));
 var StorageStack = class extends sst2.Stack {
   bucket;
   table;
@@ -73,10 +80,11 @@ var StorageStack = class extends sst2.Stack {
     });
   }
 };
+__name(StorageStack, "StorageStack");
 
 // stacks/AuthStack.js
-var iam = __toModule(require("aws-cdk-lib/iam-import"));
-var sst3 = __toModule(require("@serverless-stack/resources"));
+var iam = __toESM(require("aws-cdk-lib/aws-iam"));
+var sst3 = __toESM(require("@serverless-stack/resources"));
 var AuthStack = class extends sst3.Stack {
   auth;
   constructor(scope, id, props) {
@@ -107,11 +115,12 @@ var AuthStack = class extends sst3.Stack {
     });
   }
 };
+__name(AuthStack, "AuthStack");
 
 // stacks/index.js
 function main(app) {
   const storageStack = new StorageStack(app, "storage");
-  new ApiStack(app, "api", {
+  const apiStack = new ApiStack(app, "api", {
     table: storageStack.table
   });
   new AuthStack(app, "auth", {
@@ -119,6 +128,8 @@ function main(app) {
     bucket: storageStack.bucket
   });
 }
+__name(main, "main");
+module.exports = __toCommonJS(stacks_exports);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {});
 //# sourceMappingURL=index.js.map

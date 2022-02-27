@@ -1,1 +1,1 @@
-{"name":"notes","region":"us-east-1","main":"stacks/index.js","stage":"dev","lint":true,"typeCheck":true}
+{"name":"notes","region":"us-east-1","main":"stacks/index.js","stage":"dev","lint":true,"typeCheck":true,"debugEndpoint":"wss://6lotmgvfx9.execute-api.us-east-1.amazonaws.com/dev","debugBucketArn":"arn:aws:s3:::dev-notes-debug-stack-bucket83908e77-lxfex299mcli","debugBucketName":"dev-notes-debug-stack-bucket83908e77-lxfex299mcli","debugStartedAt":1645993326447,"debugIncreaseTimeout":false}
