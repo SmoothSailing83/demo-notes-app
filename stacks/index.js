@@ -1,5 +1,19 @@
+import ApiStack from "./ApiStack";
 import StorageStack from "./StorageStack";
+import AuthStack from "./AuthStack";
+
+
 
 export default function main(app) {
-  new StorageStack(app, "storage");
+  const storageStack = new StorageStack(app, "storage");
+
+  new ApiStack(app, "api", {
+    table: storageStack.table,
+  });
+
+  new AuthStack(app, "auth", {
+    api: apiStack.api,
+    bucket: storageStack.bucket,
+  });
+
 }

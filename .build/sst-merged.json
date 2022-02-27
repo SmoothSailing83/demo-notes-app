@@ -1,1 +1,1 @@
-{"name":"notes","region":"us-east-1","main":"stacks/index.js","stage":"admin","lint":true,"typeCheck":true,"debugEndpoint":"wss://kic4fzf5v0.execute-api.us-east-1.amazonaws.com/admin","debugBucketArn":"arn:aws:s3:::admin-notes-debug-stack-bucket83908e77-4on2f8oujx6g","debugBucketName":"admin-notes-debug-stack-bucket83908e77-4on2f8oujx6g","debugStartedAt":1645835994985,"debugIncreaseTimeout":false}
+{"name":"notes","region":"us-east-1","main":"stacks/index.js","stage":"dev","lint":true,"typeCheck":true}

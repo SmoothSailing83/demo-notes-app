@@ -27,27 +27,97 @@ __export(exports, {
   default: () => main
 });
 
-// stacks/StorageStack.js
+// stacks/ApiStack.js
 var sst = __toModule(require("@serverless-stack/resources"));
-var StorageStack = class extends sst.Stack {
+var ApiStack = class extends sst.Stack {
+  api;
+  constructor(scope, id, props) {
+    super(scope, id, props);
+    const { table } = props;
+    this.api = new sst.Api(this, "Api", {
+      defaultAuthorizationType: "AWS_IAM",
+      defaultFunctionProps: {
+        environment: {
+          TABLE_NAME: table.tableName
+        }
+      },
+      routes: {
+        "POST   /notes": "src/create.main",
+        "GET    /notes/{id}": "src/get.main",
+        "GET    /notes": "src/list.main",
+        "PUT    /notes/{id}": "src/update.main",
+        "DELETE /notes/{id}": "src/delete.main"
+      }
+    });
+    this.api.attachPermissions([table]);
+    this.addOutputs({
+      ApiEndpoint: this.api.url
+    });
+  }
+};
+
+// stacks/StorageStack.js
+var sst2 = __toModule(require("@serverless-stack/resources"));
+var StorageStack = class extends sst2.Stack {
   bucket;
   table;
   constructor(scope, id, props) {
     super(scope, id, props);
-    this.bucket = new sst.Bucket(this, "Uploads");
-    this.table = new sst.Table(this, "Notes", {
+    this.bucket = new sst2.Bucket(this, "Uploads");
+    this.table = new sst2.Table(this, "Notes", {
       fields: {
-        userId: sst.TableFieldType.STRING,
-        noteId: sst.TableFieldType.STRING
+        userId: sst2.TableFieldType.STRING,
+        noteId: sst2.TableFieldType.STRING
       },
       primaryIndex: { partitionKey: "userId", sortKey: "noteId" }
     });
   }
 };
 
+// stacks/AuthStack.js
+var iam = __toModule(require("aws-cdk-lib/iam-import"));
+var sst3 = __toModule(require("@serverless-stack/resources"));
+var AuthStack = class extends sst3.Stack {
+  auth;
+  constructor(scope, id, props) {
+    super(scope, id, props);
+    const { api, bucket } = props;
+    this.auth = new sst3.Auth(this, "Auth", {
+      cognito: {
+        userPool: {
+          signInAliases: { email: true }
+        }
+      }
+    });
+    this.auth.attachPermissionsForAuthUsers([
+      api,
+      new iam.PolicyStatement({
+        actions: ["s3:*"],
+        effect: iam.Effect.ALLOW,
+        resources: [
+          bucket.bucketArn + "/private/${cognito-identity.amazonaws.com:sub}/*"
+        ]
+      })
+    ]);
+    this.addOutputs({
+      Region: scope.region,
+      UserPoolId: this.auth.cognitoUserPool.userPoolId,
+      IdentityPoolId: this.auth.cognitoCfnIdentityPool.ref,
+      UserPoolClientId: this.auth.cognitoUserPoolClient.userPoolClientId
+    });
+  }
+};
+
 // stacks/index.js
 function main(app) {
-  new StorageStack(app, "storage");
+  const storageStack = new StorageStack(app, "storage");
+  new ApiStack(app, "api", {
+    table: storageStack.table
+  });
+  new AuthStack(app, "auth", {
+    api: apiStack.api,
+    bucket: storageStack.bucket
+  });
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {});
